@@ -23,8 +23,6 @@ namespace holmgang.Desktop
         GraphicsDeviceManager graphics;
         #endregion
 
-        ScreenGameComponent sgc;
-
         private static bool _EXIT = false;
 
         public static void EXIT()
@@ -40,14 +38,15 @@ namespace holmgang.Desktop
             graphics.PreferredBackBufferWidth = windowWidth;
             Window.AllowAltF4 = true;
             Window.AllowUserResizing = false;
-            Window.Title = "holmgang v0.1";
+            Window.Title = "holmgang v0.1"; // todo: doesn't do anything
 
             ContentSupplier.Instance.init(Content);
 
-            sgc = new ScreenGameComponent(this);
+            ScreenGameComponent sgc = new ScreenGameComponent(this);
             Components.Add(sgc);
             sgc.Register(new LoadingScreen()); // has to go first, for content loading
             sgc.Register(new MainMenuScreen());
+            sgc.Register(new OptionsScreen());
             sgc.Register(new GameScreen());
         }
 
@@ -59,7 +58,7 @@ namespace holmgang.Desktop
         /// </summary>
         protected override void Initialize()
         {
-            GameSingleton.Instance.init(graphics.GraphicsDevice);
+            GameSingleton.Instance.init(GraphicsDevice);
 
             base.Initialize();
         }

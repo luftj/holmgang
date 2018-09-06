@@ -24,12 +24,12 @@ namespace holmgang.Desktop
         KeyboardState prevKB;
         MouseState prevMS;
 
-        CollisionSystem collision;
         #endregion
 
         #region MODEL
         private TiledMap map;
         private TiledMapRenderer maprenderer;
+        CollisionSystem collision;
 
         Player player = new Player(new Vector2(100, 100)); // todo: put this in a game init (gamesingleton?), load from map
         Character npc = new Character(new Vector2(400, 400));
@@ -85,7 +85,7 @@ namespace holmgang.Desktop
 
             // map
             maprenderer.Draw(map.GetLayer("Tile Layer 1"), cam.GetViewMatrix());
-            //maprenderer.Draw(map.GetLayer("collision"), cam.GetViewMatrix()); // debug
+            maprenderer.Draw(map.GetLayer("collision")); // debug
 
             // game objects
             GameSingleton.Instance.draw(gameTime, spriteBatch);
@@ -110,12 +110,8 @@ namespace holmgang.Desktop
         public override void Update(GameTime gameTime)
         {
             #region uiinput
-            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                //Hide();
-                //this.IsVisible = false;
+            if(Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Show<MainMenuScreen>();
-            }
             #endregion
 
             hud.update(gameTime);

@@ -5,6 +5,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace holmgang.Desktop
 {
+    public class GameSettings
+    {
+        public int MasterVolume = 100;
+
+        public void changeSetting(string key, string value)
+        {
+
+        }
+    }
+
     public sealed class GameSingleton : IUpdatable, IDrawable
     {
         public struct ListAction
@@ -39,19 +49,25 @@ namespace holmgang.Desktop
         List<ListAction> changelist;
 
         public GraphicsDevice graphics { private set; get; }
+        public GameSettings gameSettings;
 
         public World world;
+
+
+        //private TiledMap map;
+        //private TiledMapRenderer maprenderer;
+        //CollisionSystem collision;
 
         static GameSingleton()
         {
         }
-
         private GameSingleton()
         {
             drawables = new List<IDrawable>();
             actions = new List<CharAction>();
             updatables = new List<IUpdatable>();
             changelist = new List<ListAction>();
+            gameSettings = new GameSettings();
 
             world = new World();
             updatables.Add(world);
@@ -115,6 +131,14 @@ namespace holmgang.Desktop
         }
         #endregion
 
+        public void startGame()
+        {
+
+            //map = ContentSupplier.Instance.maps["map"];
+            //collision = new CollisionSystem(GameSingleton.Instance.graphics.Viewport.Width,
+                                            //GameSingleton.Instance.graphics.Viewport.Height,
+                                            //map, maprenderer, cam); //todo this allows collisin only in visible area
+        }
 
         public void update(GameTime gameTime)
         {

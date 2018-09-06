@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace holmgang.Desktop
 {
@@ -45,6 +46,7 @@ namespace holmgang.Desktop
                         continue;
                     if((c.pos - pos).Length() < 30.0f)
                         c.hit();
+                    ContentSupplier.Instance.sounds["sound"].Play();
                 }
                 break;
             case ActionType.Blood:

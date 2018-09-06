@@ -9,7 +9,7 @@ namespace holmgang.Desktop
 {
     public class MenuItem
     {
-        string text;
+        protected string text;
         public Action action;
         public bool selected = false;
 
@@ -19,7 +19,7 @@ namespace holmgang.Desktop
             this.action = action;
         }
 
-        public void draw(GameTime gameTime, SpriteBatch spriteBatch, int pos)
+        public virtual void draw(GameTime gameTime, SpriteBatch spriteBatch, int pos)
         {
             spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], text, Vector2.UnitY * 20 * pos, selected ? Color.Yellow : Color.White);
         }
@@ -30,8 +30,9 @@ namespace holmgang.Desktop
         protected List<MenuItem> items;
         protected SpriteBatch spriteBatch;
 
+        protected KeyboardState prevKB;
 
-        int currentSelection = 0;
+        protected int currentSelection = 0;
 
         public MenuScreen()
         {
@@ -54,7 +55,7 @@ namespace holmgang.Desktop
                     items[currentSelection].action.Invoke();
                 }
 
-                if(Keyboard.GetState().IsKeyDown(Keys.Down))
+                if(Keyboard.GetState().IsKeyDown(Keys.Down) && prevKB.IsKeyUp(Keys.Down))
                 {
                     items[currentSelection].selected = false;
                     currentSelection++;
@@ -62,7 +63,7 @@ namespace holmgang.Desktop
                         currentSelection = items.Count -1 ;
                     items[currentSelection].selected = true;
                 }
-                if(Keyboard.GetState().IsKeyDown(Keys.Up))
+                if(Keyboard.GetState().IsKeyDown(Keys.Up) && prevKB.IsKeyUp(Keys.Up))
                 {
                     items[currentSelection].selected = false;
                     currentSelection--;
@@ -72,11 +73,14 @@ namespace holmgang.Desktop
                 }
             }
 
+            prevKB = Keyboard.GetState();
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
+            GameSingleton.Instance.graphics.Clear(Color.Black);
+
             spriteBatch.Begin();
             int it = 0;
             foreach(MenuItem item in items)
