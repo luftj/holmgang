@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.6" orientation="isometric" renderorder="right-down" width="25" height="25" tilewidth="64" tileheight="32" infinite="0" nextobjectid="2">
+ <tileset firstgid="1" name="isometric_grass_and_water" tilewidth="64" tileheight="64" tilecount="24" columns="4">
+  <tileoffset x="0" y="16"/>
+  <grid orientation="isometric" width="64" height="32"/>
+  <image source="isometric_grass_and_water.png" width="256" height="384"/>
+  <terraintypes>
+   <terrain name="Grass" tile="0"/>
+   <terrain name="Water" tile="22"/>
+  </terraintypes>
+  <tile id="0" terrain="0,0,0,0"/>
+  <tile id="1" terrain="0,0,0,0"/>
+  <tile id="2" terrain="0,0,0,0"/>
+  <tile id="3" terrain="0,0,0,0"/>
+  <tile id="4" terrain="0,0,0,1">
+   <objectgroup draworder="index">
+    <object id="1" x="22.5323" y="22.3544">
+     <polygon points="-0.811205,-0.270402 -18.5225,0.135201 -0.135201,-16.6297"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="5" terrain="0,0,1,0"/>
+  <tile id="6" terrain="1,0,0,0"/>
+  <tile id="7" terrain="0,1,0,0"/>
+  <tile id="8" terrain="0,1,1,1"/>
+  <tile id="9" terrain="1,0,1,1"/>
+  <tile id="10" terrain="1,1,1,0"/>
+  <tile id="11" terrain="1,1,0,1"/>
+  <tile id="12" terrain="0,0,1,1"/>
+  <tile id="13" terrain="1,0,1,0"/>
+  <tile id="14" terrain="1,1,0,0"/>
+  <tile id="15" terrain="0,1,0,1"/>
+  <tile id="16" terrain="0,0,1,1"/>
+  <tile id="17" terrain="1,0,1,0"/>
+  <tile id="18" terrain="1,1,0,0"/>
+  <tile id="19" terrain="0,1,0,1"/>
+  <tile id="20" terrain="0,1,1,0"/>
+  <tile id="21" terrain="1,0,0,1"/>
+  <tile id="22" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="1" x="-9.91596" y="-10.7698" width="32.0426" height="32.0426"/>
+   </objectgroup>
+  </tile>
+  <tile id="23" terrain="1,1,1,1">
+   <objectgroup draworder="index">
+    <object id="1" x="-9.91596" y="-10.4994" width="31.7722" height="32.313"/>
+   </objectgroup>
+  </tile>
+  <wangsets>
+   <wangset name="Grass and Water" tile="15">
+    <wangcornercolor name="Grass" color="#8ab022" tile="0" probability="1"/>
+    <wangcornercolor name="Water" color="#378dc2" tile="23" probability="1"/>
+    <wangtile tileid="0" wangid="0x10101010"/>
+    <wangtile tileid="1" wangid="0x10101010"/>
+    <wangtile tileid="2" wangid="0x10101010"/>
+    <wangtile tileid="3" wangid="0x10101010"/>
+    <wangtile tileid="4" wangid="0x10102010"/>
+    <wangtile tileid="5" wangid="0x10201010"/>
+    <wangtile tileid="6" wangid="0x20101010"/>
+    <wangtile tileid="7" wangid="0x10101020"/>
+    <wangtile tileid="8" wangid="0x10202020"/>
+    <wangtile tileid="9" wangid="0x20202010"/>
+    <wangtile tileid="10" wangid="0x20201020"/>
+    <wangtile tileid="11" wangid="0x20102020"/>
+    <wangtile tileid="12" wangid="0x10202010"/>
+    <wangtile tileid="13" wangid="0x20201010"/>
+    <wangtile tileid="14" wangid="0x20101020"/>
+    <wangtile tileid="15" wangid="0x10102020"/>
+    <wangtile tileid="16" wangid="0x10202010"/>
+    <wangtile tileid="17" wangid="0x20201010"/>
+    <wangtile tileid="18" wangid="0x20101020"/>
+    <wangtile tileid="19" wangid="0x10102020"/>
+    <wangtile tileid="20" wangid="0x10201020"/>
+    <wangtile tileid="21" wangid="0x20102010"/>
+    <wangtile tileid="22" wangid="0x20202020"/>
+    <wangtile tileid="23" wangid="0x20202020"/>
+   </wangset>
+  </wangsets>
+ </tileset>
+ <tileset firstgid="25" source="isometric_grass_and_water_coll.tsx"/>
+ <layer name="Tile Layer 1" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJx1ltmOgzAMRQPNdJuulGn5/y+dIPlIB0MfrBYSb9fXNlMpZWryafLb5BVyiXeTzvO9y4bOlPSsP8utyS7kKJ1Jtu5NDk26uPNu8myyj+d78ofuPenW8DMq7vmsj/Odfh9hZ4jzXu+JfZBN7vBMLoPec4YfYj/ovEoXfIivbvw/hv6PMNlJqn4daxUO59Cz7Sosck75viXHB15g2ZUlTruIfR+/1yYn1Qb/uT5Vdsybm86wC07vsE08OQ/sW8/YjSkuakj9eDbvwde1sR5+weGkmpNHX9b1HJMPc9I6uZ7kMMjnNWLrpEss2HUf3xJe33KgP+gl423+2b59GIOquri3iGUs67rmmfLZ8GHOErvjPsue+3Iqy/4nxzwf4TxYPZLvrbi3+Ox54XzyDHPPDcknM5H7s72Xns0zz1Xz3dzIebhumXe5H/uy7Dtw9AwAS3DO8wrdPumxU3xOLPO9v7LcF2AIVp84827y3nBM8NO94JlMD5mT2DHXwCjjbt7nXniWdY+ehQN5bO2gb3vE+cAbeAb3ch+NZTnbiddz2rXIO8V7mnn+Sr5GYcgdvgM8v3KO3h+eJ8YbP95v17LmIXPcPvMOM4efEux0ZT1H8tzwN9Q7xeL6+h7fSbP8A1deGSg=
+  </data>
+ </layer>
+ <layer name="collision" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjILBB5zpYD4Iu9PYDg862OFOQzuQw4nadjgzYJpPC38gm02r+BiIcKKmPdjMpoVd2OKAlnE/3AEA1S8N6Q==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="1" x="414.5" y="477.5">
+   <polygon points="36,20 87.5,-27.5 76,-194 35,-195 9.5,-231.5 -1.5,-226.5 -15,-265 -37.5,-268.5 -97.5,-258.5 -109.5,-142.5 -133,-121 -134.5,-89.5 -109.5,-68.5 -101,-23 -48,-10 -37.5,15.5"/>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,25 @@
+﻿==========
+=  Todo  =
+==========
+
+collision for ai 
+-(offscreen)
+
+UI
+-HUD
+--runes
+-other
+--inventory
+
+menues
+-options
+--screen resolution
+--fullscreen
+-layouting
+
+Gamestate
+-start new game with 
+--resetting state
+--loading from map
+-resume game with loading from savestate
+-save game
