@@ -50,7 +50,7 @@ namespace holmgang.Desktop
             if(items.Count > 0)
             {
 
-                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                if(Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKB.IsKeyUp(Keys.Enter))
                 {
                     items[currentSelection].action.Invoke();
                 }

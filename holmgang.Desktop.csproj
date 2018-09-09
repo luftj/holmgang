@@ -69,6 +69,7 @@
     <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="View\HUD.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
+    <Compile Include="Control\Picker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

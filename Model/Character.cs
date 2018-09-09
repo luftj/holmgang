@@ -38,7 +38,12 @@ namespace holmgang.Desktop
                 return;
             dir.Normalize(); //zero vector -> NaN
             dir *= speed;
+
+
+
             pos += dir;
+
+            //todo: collision
         }
 
         public void update(GameTime gametime)

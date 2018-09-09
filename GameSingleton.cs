@@ -7,11 +7,86 @@ namespace holmgang.Desktop
 {
     public class GameSettings
     {
-        public int MasterVolume = 100;
-
-        public void changeSetting(string key, string value)
+        public class GameSetting
         {
+            public string key;
+            public string curval;
 
+            public GameSetting(string key, string value)
+            {
+                this.key = key;
+                this.curval = value;
+            }
+
+            public virtual string getCurVal()
+            {
+                return curval;
+            }
+
+            public virtual void incVal()
+            {
+
+            }
+
+            public virtual void decVal()
+            {
+
+            }
+        }
+
+        public class GameSettingPercent : GameSetting
+        {
+            public GameSettingPercent(string key, string val) : base(key,val)
+            {}
+
+            public override void incVal()
+            {
+                int t = (Int32.Parse(curval));
+                if( t < 100)
+                    curval = "" + ++t;
+            }
+
+            public override void decVal()
+            {
+                int t = (Int32.Parse(curval));
+                if(t > 0)
+                    curval = "" + --t;
+            }
+        }
+
+        public class GameSettingList : GameSetting
+        {
+            List<string> possibleValues;
+            int curitem;
+
+            public GameSettingList(string key, string value, params string[] possVals) : base(key, value)
+            {
+                possibleValues = new List<string>(possVals);
+            }
+
+            public override void incVal()
+            {
+                int i = (possibleValues.IndexOf(curval));
+                int idx = ++i;
+                if(idx < possibleValues.Count)
+                    curval = possibleValues[idx];
+            }
+
+            public override void decVal()
+            {
+                int i = (possibleValues.IndexOf(curval));
+                int idx = --i; 
+                if(idx >= 0)
+                    curval = possibleValues[idx];
+            }
+        }
+
+        List<GameSetting> settingsList;
+
+        public GameSettings()
+        {
+            settingsList = new List<GameSetting>();
+            settingsList.Add(new GameSetting("mastervol","100"));
         }
     }
 
@@ -49,14 +124,10 @@ namespace holmgang.Desktop
         List<ListAction> changelist;
 
         public GraphicsDevice graphics { private set; get; }
-        public GameSettings gameSettings;
+
+        public List<GameSettings.GameSetting> settingsList;
 
         public World world;
-
-
-        //private TiledMap map;
-        //private TiledMapRenderer maprenderer;
-        //CollisionSystem collision;
 
         static GameSingleton()
         {
@@ -67,7 +138,7 @@ namespace holmgang.Desktop
             actions = new List<CharAction>();
             updatables = new List<IUpdatable>();
             changelist = new List<ListAction>();
-            gameSettings = new GameSettings();
+            settingsList = new List<GameSettings.GameSetting>();
 
             world = new World();
             updatables.Add(world);
@@ -76,6 +147,8 @@ namespace holmgang.Desktop
         public void init(GraphicsDevice gd)
         {
             graphics = gd;
+
+            settingsList.Add(new GameSettings.GameSettingPercent("mastervol", "100"));
         }
 
         #region changelist
@@ -133,11 +206,11 @@ namespace holmgang.Desktop
 
         public void startGame()
         {
+        }
 
-            //map = ContentSupplier.Instance.maps["map"];
-            //collision = new CollisionSystem(GameSingleton.Instance.graphics.Viewport.Width,
-                                            //GameSingleton.Instance.graphics.Viewport.Height,
-                                            //map, maprenderer, cam); //todo this allows collisin only in visible area
+        public void changeSetting(string key, string value)
+        {
+            settingsList.Find(x => x.key == key).curval = value;
         }
 
         public void update(GameTime gameTime)
@@ -145,7 +218,9 @@ namespace holmgang.Desktop
             //foreach(ListAction la in changelist)
             //    performListAction(la);
             //changelist.Clear();
-
+            
+            foreach(CharAction a in actions)
+                a.update(gameTime);
             List<IUpdatable> updates = new List<IUpdatable>();
             updates.AddRange(Instance.updatables);
             foreach(IUpdatable u in updates)

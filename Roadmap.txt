@@ -2,14 +2,24 @@
 =  Todo  =
 ==========
 
+Concept
+-where to store ai behaviour in maps? [1]
+-equipped items as separate sprites with scenegraph? or exhaustive tilesets?
+-sorld simulation outside viewport
+
+AI
 collision for ai 
 -(offscreen)
+
+NPC
+-factions/friend-or-foe
 
 UI
 -HUD
 --runes
 -other
---inventory
+--inventory screen etc
+--dialog screens?
 
 menues
 -options
@@ -18,8 +28,61 @@ menues
 -layouting
 
 Gamestate
--start new game with 
+-start new game with:
 --resetting state
 --loading from map
 -resume game with loading from savestate
 -save game
+
+Map handling
+-load spawn points from object layer. consider [1]
+
+Gameplay
+-character actions/states
+--attacks
+---attack speed
+--duck?
+--block
+--roll
+--dash/sprint
+-equipment/items
+--stats
+--state
+--equipping
+--leveling
+--drawing equipped items
+
+Particle system and environmental effects
+-weapon swoosh
+-blood
+-fire
+-light and shadow -> apply effect when drawing map?
+
+Environment interaction
+-doors/map changes -> place in collision layer of map
+-talking to npc
+-using usable things?
+-movement speed -> place in collision layer of map
+
+=============
+=  Roadmap  =
+=============
+
+v0.1
+
+v0.5 FIRST PLAYABLE
+- mayor gameplay implemented
+- first level complete
+- asset pipeline complete
+
+v0.8 ALPHA
+-feature complete
+- playable
+- only tweaking of code from here
+- assets partially finished
+
+v0.9 BETA
+-code freeze -> only bugfixing from here on out
+-feature and asset complete
+
+v1.0 RELEASE

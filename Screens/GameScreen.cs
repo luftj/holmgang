@@ -56,6 +56,7 @@ namespace holmgang.Desktop
             //var viewportAdapter = new BoxingViewportAdapter(game.Window, game.GraphicsDevice, 
                                                             //game.GraphicsDevice.Viewport.Width, 
                                                             //game.GraphicsDevice.Viewport.Height);
+
             cam = new Camera2D(GameSingleton.Instance.graphics);
         }
 
@@ -65,46 +66,7 @@ namespace holmgang.Desktop
             map = ContentSupplier.Instance.maps["map"];
             collision = new CollisionSystem(GameSingleton.Instance.graphics.Viewport.Width, 
                                             GameSingleton.Instance.graphics.Viewport.Height, 
-                                            map, maprenderer, cam); //todo this allows collisin only in visible area
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            #region collisiondetection
-            // draws on separate render target, has to come first
-            collision.Begin();
-            collision.handleMap();
-            collision.End();
-            #endregion
-
-            GameSingleton.Instance.graphics.Clear(Color.CornflowerBlue);
-
-            // draw in world coords
-            #region drawworld
-            spriteBatch.Begin(transformMatrix: cam.GetViewMatrix(), samplerState: SamplerState.PointClamp);
-
-            // map
-            maprenderer.Draw(map.GetLayer("Tile Layer 1"), cam.GetViewMatrix());
-            maprenderer.Draw(map.GetLayer("collision")); // debug
-
-            // game objects
-            GameSingleton.Instance.draw(gameTime, spriteBatch);
-
-            spriteBatch.End();
-            #endregion
-
-            // draw in screen coords
-            #region drawscreen
-            spriteBatch.Begin();
-
-            // interface
-            hud.draw(gameTime, spriteBatch);
-            // todo: draw other interface
-
-            spriteBatch.End();
-            #endregion
-
-            base.Draw(gameTime);
+                                            map, maprenderer, cam); 
         }
 
         public override void Update(GameTime gameTime)
@@ -118,8 +80,6 @@ namespace holmgang.Desktop
 
             maprenderer.Update(map, gameTime);
 
-            foreach(CharAction a in GameSingleton.Instance.actions)
-                a.update(gameTime);
 
             GameSingleton.Instance.update(gameTime);
 
@@ -161,7 +121,6 @@ namespace holmgang.Desktop
             if(Keyboard.GetState().IsKeyDown(Keys.OemMinus) && prevKB.IsKeyUp(Keys.OemMinus))
                 cam.Zoom = cam.Zoom / 2f;
 
-
             // debug output
             //Vector2 bla = Vector2.Zero;
             //foreach(var s in Keyboard.GetState().GetPressedKeys())
@@ -171,12 +130,53 @@ namespace holmgang.Desktop
             //    spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], s.ToString(), bla, Color.White);
             //}
             //Console.WriteLine(collision.getCollisionKey(cam.WorldToScreen(player.pos + move * player.speed)));
+            Vector2 m = cam.ScreenToWorld((float)Mouse.GetState().X, (float)Mouse.GetState().Y);
+            Console.WriteLine(m.ToString() + "---" + collision.getPassable(m)); //m.X, m.Y));
             #endregion
 
             prevKB = Keyboard.GetState();
             prevMS = Mouse.GetState();
 
             base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            #region collisiondetection
+            // draws on separate render target, has to come first
+            collision.Begin();
+            collision.handleMap();
+            collision.End();
+            #endregion
+
+            GameSingleton.Instance.graphics.Clear(Color.CornflowerBlue);
+
+            // draw in world coords
+            #region drawworld
+            spriteBatch.Begin(transformMatrix: cam.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+
+            // map
+            maprenderer.Draw(map.GetLayer("Tile Layer 1"), cam.GetViewMatrix());
+            //maprenderer.Draw(map.GetLayer("collision")); // debug
+
+            // game objects
+            GameSingleton.Instance.draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
+            #endregion
+
+            // draw in screen coords
+            #region drawscreen
+            spriteBatch.Begin();
+
+            // interface
+            hud.draw(gameTime, spriteBatch);
+            // todo: draw other interface
+
+            spriteBatch.End();
+            #endregion
+
+            base.Draw(gameTime);
         }
     }
 }

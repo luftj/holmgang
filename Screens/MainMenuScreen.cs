@@ -11,6 +11,12 @@ namespace holmgang.Desktop
 
         public MainMenuScreen()
         {
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+
             items.Add(new MenuItem("start", Show<GameScreen>) { selected = true });
             items.Add(new MenuItem("options", Show<OptionsScreen>));
             items.Add(new MenuItem("end", Game1.EXIT));
@@ -23,7 +29,8 @@ namespace holmgang.Desktop
                 MediaPlayer.Play(ContentSupplier.Instance.music["music"]);
                 initialised = true;
             }
-
+            string bla = GameSingleton.Instance.settingsList.Find(x => x.key == "mastervol").curval;
+            MediaPlayer.Volume = (float)(Int32.Parse(bla))/100f; // todo: move this somewhere else -> separate soundhandler class?
             base.Update(gameTime);
         }
     }

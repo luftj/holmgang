@@ -16,21 +16,25 @@ namespace holmgang.Desktop
     public class OptionsItem : MenuItem
     {
         public List<string> values;
-        string curval;
+        public string curval;
         OptionType type;
+        public GameSettings.GameSetting setting;
 
-        public OptionsItem(string text, OptionType type, params string[] values) : base(text, null)
+        //public OptionsItem(string text, OptionType type, params string[] values) : base(text, null)
+        public OptionsItem(string text, GameSettings.GameSetting setting) : base(text, null)
         {
-            this.values = new List<string>(values);
-            this.type = type;
-            curval = values[0];
+            //this.values = new List<string>(values);
+            //this.type = type;
+            //curval = values[0];
             action = doNothing; // todo: seriously?
+            this.setting = setting;
         }
 
         public override void draw(GameTime gameTime, SpriteBatch spriteBatch, int pos)
         {
             base.draw(gameTime, spriteBatch, pos);
-            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], curval, Vector2.UnitX * 200 + Vector2.UnitY * 20 * pos, selected ? Color.Yellow : Color.White);
+            //spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], curval, Vector2.UnitX * 200 + Vector2.UnitY * 20 * pos, selected ? Color.Yellow : Color.White);
+            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], setting.getCurVal(), Vector2.UnitX * 200 + Vector2.UnitY * 20 * pos, selected ? Color.Yellow : Color.White);
         }
 
         public void doNothing()
@@ -40,46 +44,28 @@ namespace holmgang.Desktop
 
         public void save()
         {
-            GameSingleton.Instance.gameSettings.changeSetting(text, curval);
+            // todo: right now, change is immediately saved -> implement either temp values until save or revert funcitonality
         }
 
-        public void right()
-        {
-            if(type == OptionType.PERCENT && curval != "100")
-            {
-                int t = (Int32.Parse(curval));
-                curval = "" + ++t;
-            } else if(type == OptionType.LIST)
-            {
-                int i = (values.IndexOf(curval));
-                int idx = ++i;
-                if(idx < values.Count)
-                    curval = values[idx];
-            }
-        }
-
-        public void left()
-        {
-            if(type == OptionType.PERCENT && curval != "0")
-            {
-                int t = (Int32.Parse(curval));
-                curval = "" + --t;
-            } else if(type == OptionType.LIST)
-            {
-                int i = (values.IndexOf(curval));
-                int idx = --i; if(idx >= 0)
-                    curval = values[idx];
-            }
-        }
     }
 
     public class OptionsScreen : MenuScreen
     {
         public OptionsScreen() : base()
         {
-            items.Add(new OptionsItem("Master Volume", OptionType.PERCENT, "100") { selected = true });
-            items.Add(new OptionsItem("Screen Resolution", OptionType.LIST, "800x480", "1920x1080"));
-            items.Add(new MenuItem("Save", saveOptions));
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+
+            //items.Add(new OptionsItem("Master Volume", OptionType.PERCENT, GameSingleton.Instance.settings["mastervol"]) { selected = true });
+            //items.Add(new OptionsItem("Screen Resolution", OptionType.LIST, "800x480", "1920x1080") { curval = "800x480" });
+            foreach(var item in GameSingleton.Instance.settingsList)
+                items.Add(new OptionsItem("Master Volume", item));
+            items[0].selected = true;
+
+            //items.Add(new MenuItem("Save", saveOptions));
             items.Add(new MenuItem("Back", Show<MainMenuScreen>));
         }
 
@@ -97,22 +83,31 @@ namespace holmgang.Desktop
 
         public override void Update(GameTime gameTime)
         {
+            // todo: get current values from stored gamesettings when entering screen
+
+            if(Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKB.IsKeyUp(Keys.Escape))
+            {
+                Show<MainMenuScreen>();
+            }
+
             if(items.Count > 0)
             {
                 if(Keyboard.GetState().IsKeyDown(Keys.Right) && prevKB.IsKeyUp(Keys.Right))
                 {
                     OptionsItem o = items[currentSelection] as OptionsItem;
                     if(o != null)
-                        o.right();
+                        //o.right();
+                        o.setting.incVal();
                 }
                 if(Keyboard.GetState().IsKeyDown(Keys.Left) && prevKB.IsKeyUp(Keys.Left))
                 {
                     OptionsItem o = items[currentSelection] as OptionsItem;
                     if(o != null)
-                        o.left();
+                        //o.left();
+                        o.setting.decVal();
                 }
             }
-
+            
             base.Update(gameTime);
         }
     }
