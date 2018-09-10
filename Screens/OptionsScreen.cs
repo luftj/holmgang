@@ -7,17 +7,10 @@ using MonoGame.Extended.Screens;
 
 namespace holmgang.Desktop
 {
-    public enum OptionType
-    {
-        PERCENT,
-        LIST
-    }
-
     public class OptionsItem : MenuItem
     {
         public List<string> values;
         public string curval;
-        OptionType type;
         public GameSettings.GameSetting setting;
 
         //public OptionsItem(string text, OptionType type, params string[] values) : base(text, null)

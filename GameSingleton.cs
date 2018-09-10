@@ -90,58 +90,57 @@ namespace holmgang.Desktop
         }
     }
 
-    public sealed class GameSingleton : IUpdatable, IDrawable
+    public sealed class GameSingleton //: IUpdatable, IDrawable
     {
-        public struct ListAction
-        {
-            public enum ListActionType
-            {
-                ADD,
-                REMOVE,
-                CLEAR,
-                NONE,
-            }
-            public object item;
-            public ListActionType action;
+        //public struct ListAction
+        //{
+        //    public enum ListActionType
+        //    {
+        //        ADD,
+        //        REMOVE,
+        //        CLEAR,
+        //        NONE,
+        //    }
+        //    public object item;
+        //    public ListActionType action;
 
-            public ListAction(object item, ListActionType action)
-            {
-                if(item is IDrawable || item is IUpdatable || item is CharAction)
-                    this.item = item;
-                else
-                    throw new ArgumentException("wrong item type");
-                this.action = action;
-            }
-        }
+        //    public ListAction(object item, ListActionType action)
+        //    {
+        //        if(item is IDrawable || item is IUpdatable || item is CharAction)
+        //            this.item = item;
+        //        else
+        //            throw new ArgumentException("wrong item type");
+        //        this.action = action;
+        //    }
+        //}
 
         private static readonly GameSingleton instance = new GameSingleton();
         public static GameSingleton Instance { get { return instance; } }
 
-
-        public List<IDrawable> drawables;
-        public List<CharAction> actions;
-        public List<IUpdatable> updatables;
-        List<ListAction> changelist;
+        //public List<IDrawable> drawables;
+        //public List<CharAction> actions;
+        //public List<IUpdatable> updatables;
+        //List<ListAction> changelist;
+        //public World world;
 
         public GraphicsDevice graphics { private set; get; }
 
         public List<GameSettings.GameSetting> settingsList;
 
-        public World world;
 
         static GameSingleton()
         {
         }
         private GameSingleton()
         {
-            drawables = new List<IDrawable>();
-            actions = new List<CharAction>();
-            updatables = new List<IUpdatable>();
-            changelist = new List<ListAction>();
-            settingsList = new List<GameSettings.GameSetting>();
+            //drawables = new List<IDrawable>();
+            //actions = new List<CharAction>();
+            //updatables = new List<IUpdatable>();
+            //changelist = new List<ListAction>();
+            //world = new World();
+            //updatables.Add(world);
 
-            world = new World();
-            updatables.Add(world);
+            settingsList = new List<GameSettings.GameSetting>();
         }
 
         public void init(GraphicsDevice gd)
@@ -151,58 +150,58 @@ namespace holmgang.Desktop
             settingsList.Add(new GameSettings.GameSettingPercent("mastervol", "100"));
         }
 
-        #region changelist
-        public void removeUpdate(IUpdatable comp)
-        {
-            changelist.Add(new ListAction(comp, ListAction.ListActionType.REMOVE));
-        }
-        public void addUpdate(IUpdatable comp)
-        {
-            changelist.Add(new ListAction(comp, ListAction.ListActionType.ADD));
-        }
-        public void removeDraw(IDrawable comp)
-        {
-            changelist.Add(new ListAction(comp, ListAction.ListActionType.REMOVE));
-        }
-        public void addDraw(IDrawable comp)
-        {
-            changelist.Add(new ListAction(comp, ListAction.ListActionType.ADD));
-        }
+        //#region changelist
+        //public void removeUpdate(IUpdatable comp)
+        //{
+        //    changelist.Add(new ListAction(comp, ListAction.ListActionType.REMOVE));
+        //}
+        //public void addUpdate(IUpdatable comp)
+        //{
+        //    changelist.Add(new ListAction(comp, ListAction.ListActionType.ADD));
+        //}
+        //public void removeDraw(IDrawable comp)
+        //{
+        //    changelist.Add(new ListAction(comp, ListAction.ListActionType.REMOVE));
+        //}
+        //public void addDraw(IDrawable comp)
+        //{
+        //    changelist.Add(new ListAction(comp, ListAction.ListActionType.ADD));
+        //}
 
-        void performListAction(ListAction la)
-        {
-            switch(la.action)
-            {
-            case ListAction.ListActionType.REMOVE:
-                if(la.item is IDrawable)
-                    drawables.Remove(la.item as IDrawable);
-                if(la.item is IUpdatable)
-                    updatables.Remove(la.item as IUpdatable);
-                else if(la.item is CharAction)
-                    actions.Remove(la.item as CharAction);
-                break;
-            case ListAction.ListActionType.ADD:
-                if(la.item is IDrawable)
-                    drawables.Add(la.item as IDrawable);
-                if(la.item is IUpdatable)
-                    updatables.Add(la.item as IUpdatable);
-                else if(la.item is CharAction)
-                    actions.Add(la.item as CharAction);
-                break;
-            case ListAction.ListActionType.CLEAR:
-                if(la.item is IDrawable)
-                    drawables.Clear();
-                if(la.item is IUpdatable)
-                    updatables.Clear();
-                if(la.item is CharAction)
-                    actions.Clear();
-                break;
-            case ListAction.ListActionType.NONE:
-                break;
-            }
+        //void performListAction(ListAction la)
+        //{
+        //    switch(la.action)
+        //    {
+        //    case ListAction.ListActionType.REMOVE:
+        //        if(la.item is IDrawable)
+        //            drawables.Remove(la.item as IDrawable);
+        //        if(la.item is IUpdatable)
+        //            updatables.Remove(la.item as IUpdatable);
+        //        else if(la.item is CharAction)
+        //            actions.Remove(la.item as CharAction);
+        //        break;
+        //    case ListAction.ListActionType.ADD:
+        //        if(la.item is IDrawable)
+        //            drawables.Add(la.item as IDrawable);
+        //        if(la.item is IUpdatable)
+        //            updatables.Add(la.item as IUpdatable);
+        //        else if(la.item is CharAction)
+        //            actions.Add(la.item as CharAction);
+        //        break;
+        //    case ListAction.ListActionType.CLEAR:
+        //        if(la.item is IDrawable)
+        //            drawables.Clear();
+        //        if(la.item is IUpdatable)
+        //            updatables.Clear();
+        //        if(la.item is CharAction)
+        //            actions.Clear();
+        //        break;
+        //    case ListAction.ListActionType.NONE:
+        //        break;
+        //    }
 
-        }
-        #endregion
+        //}
+        //#endregion
 
         public void startGame()
         {
@@ -213,27 +212,27 @@ namespace holmgang.Desktop
             settingsList.Find(x => x.key == key).curval = value;
         }
 
-        public void update(GameTime gameTime)
-        {
-            //foreach(ListAction la in changelist)
-            //    performListAction(la);
-            //changelist.Clear();
+        //public void update(GameTime gameTime)
+        //{
+        //    //foreach(ListAction la in changelist)
+        //    //    performListAction(la);
+        //    //changelist.Clear();
             
-            foreach(CharAction a in actions)
-                a.update(gameTime);
-            List<IUpdatable> updates = new List<IUpdatable>();
-            updates.AddRange(Instance.updatables);
-            foreach(IUpdatable u in updates)
-                u.update(gameTime);
-        }
+        //    //foreach(CharAction a in actions)
+        //        //a.update(gameTime);
+        //    //List<IUpdatable> updates = new List<IUpdatable>();
+        //    //updates.AddRange(Instance.updatables);
+        //    //foreach(IUpdatable u in updates)
+        //        //u.update(gameTime);
+        //}
 
-        public void draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            world.draw(gameTime, spriteBatch);
+        //public void draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    //world.draw(gameTime, spriteBatch);
 
-            foreach(IDrawable d in Instance.drawables)
-                d.draw(gameTime, spriteBatch);
-        }
+        //    //foreach(IDrawable d in Instance.drawables)
+        //        //d.draw(gameTime, spriteBatch);
+        //}
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -29,21 +30,13 @@ namespace holmgang.Desktop
         #region MODEL
         private TiledMap map;
         private TiledMapRenderer maprenderer;
-        CollisionSystem collision;
-
-        Player player = new Player(new Vector2(100, 100)); // todo: put this in a game init (gamesingleton?), load from map
-        Character npc = new Character(new Vector2(400, 400));
         #endregion
+
+        //ECS
+        EntityManager entityManager;
 
         public GameScreen()
         {
-            GameSingleton.Instance.drawables.Add(npc);
-            GameSingleton.Instance.world.characters.Add(npc);
-            npc.ai.Add(new AIStandGuard(player, 150));
-
-            GameSingleton.Instance.drawables.Add(player);
-            GameSingleton.Instance.world.characters.Add(player);
-            hud = new HUD(player);
         }
 
         public override void Initialize()
@@ -64,9 +57,11 @@ namespace holmgang.Desktop
         {
             base.LoadContent();
             map = ContentSupplier.Instance.maps["map"];
-            collision = new CollisionSystem(GameSingleton.Instance.graphics.Viewport.Width, 
-                                            GameSingleton.Instance.graphics.Viewport.Height, 
-                                            map, maprenderer, cam); 
+            entityManager = new EntityManager();
+            entityManager.entities.Add(EntityFactory.createPlayer(new Vector2(150, 150)));
+            entityManager.entities.Add(EntityFactory.createNPC(new Vector2(200, 0)));
+            entityManager.entities.Add(EntityFactory.createCamera(cam));
+            hud = new HUD(entityManager.GetEntities<PlayerControlComponent>()[0]);
         }
 
         public override void Update(GameTime gameTime)
@@ -78,42 +73,7 @@ namespace holmgang.Desktop
 
             hud.update(gameTime);
 
-            maprenderer.Update(map, gameTime);
-
-
-            GameSingleton.Instance.update(gameTime);
-
-            #region movementinput
-            Vector2 move = Vector2.Zero;
-            if(Keyboard.GetState().IsKeyDown(Keys.D))
-                move.X = 1;
-            if(Keyboard.GetState().IsKeyDown(Keys.A))
-                move.X = -1;
-            if(Keyboard.GetState().IsKeyDown(Keys.S))
-                move.Y = 1;
-            if(Keyboard.GetState().IsKeyDown(Keys.W))
-                move.Y = -1;
-
-            // check collision for player 
-            //todo maybe put this somewhere else? e.g. character class
-            if(collision.getCollisionKey(cam.WorldToScreen(player.pos + move * player.speed)) == CollisionType.NONE)
-            {
-                player.move(move);
-                cam.Position = player.pos - cam.Origin;
-            }
-            #endregion
-
-            #region mouseinput
-            Vector2 mousePos = Mouse.GetState().Position.ToVector2();
-
-            player.lookAt(cam.ScreenToWorld(mousePos));
-
-            if(Mouse.GetState().LeftButton == ButtonState.Pressed && prevMS.LeftButton != ButtonState.Pressed)
-            {
-                player.attack();
-                Console.WriteLine(collision.getCollisionKey(mousePos)); // debug
-            }
-            #endregion
+            maprenderer.Update(map, gameTime); // todo: needed? animated tiles?
 
             #region debug
             if(Keyboard.GetState().IsKeyDown(Keys.Add) && prevKB.IsKeyUp(Keys.Add))
@@ -130,23 +90,23 @@ namespace holmgang.Desktop
             //    spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], s.ToString(), bla, Color.White);
             //}
             //Console.WriteLine(collision.getCollisionKey(cam.WorldToScreen(player.pos + move * player.speed)));
-            Vector2 m = cam.ScreenToWorld((float)Mouse.GetState().X, (float)Mouse.GetState().Y);
-            Console.WriteLine(m.ToString() + "---" + collision.getPassable(m)); //m.X, m.Y));
+            //Vector2 m = cam.ScreenToWorld((float)Mouse.GetState().X, (float)Mouse.GetState().Y);
+            //Console.WriteLine(m.ToString() + "---" + collision.getPassable(m)); //m.X, m.Y));
             #endregion
+
+            entityManager.update(gameTime);
 
             prevKB = Keyboard.GetState();
             prevMS = Mouse.GetState();
-
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             #region collisiondetection
-            // draws on separate render target, has to come first
-            collision.Begin();
-            collision.handleMap();
-            collision.End();
+            entityManager.collisionSystem.Begin();
+            entityManager.collisionSystem.handleMap();
+            entityManager.collisionSystem.End();
             #endregion
 
             GameSingleton.Instance.graphics.Clear(Color.CornflowerBlue);
@@ -160,7 +120,7 @@ namespace holmgang.Desktop
             //maprenderer.Draw(map.GetLayer("collision")); // debug
 
             // game objects
-            GameSingleton.Instance.draw(gameTime, spriteBatch);
+            entityManager.spriteDrawService.draw(gameTime, spriteBatch, cam);
 
             spriteBatch.End();
             #endregion

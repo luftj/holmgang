@@ -5,38 +5,39 @@ using Microsoft.Xna.Framework.Input;
 
 namespace holmgang.Desktop
 {
-    public class HUD : IDrawable, IUpdatable
+    public class HUD //: IDrawable, IUpdatable
     {
-        Player player;
+        Entity player;
 
         float pulseSpeed = 0f;
         float pulsetimer = 0f;
 
-        public HUD(Player p)
+        public HUD(Entity p)
         {
             player = p;
         }
 
         public void draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
-            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], "HP: " + player.HP, Vector2.Zero, Color.White); // debug
+            float hp = player.get<HealthComponent>().HP;
+            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], "HP: " + hp, Vector2.Zero, Color.White); // debug
             spriteBatch.Draw(ContentSupplier.Instance.textures["dot"], Mouse.GetState().Position.ToVector2(), Color.White);
 
-            if(player.HP <= 80)
+            if(hp <= 80)
             {
                 spriteBatch.Draw(ContentSupplier.Instance.textures["hplow"], Vector2.Zero, 
-                                 new Color(player.HP == 0 ? Color.Black : Color.DarkRed, player.HP == 0 ? 1f : getPulse()));
+                                 new Color(hp == 0 ? Color.Black : Color.DarkRed, hp == 0 ? 1f : getPulse()));
             }
         }
 
         public void update(GameTime gameTime)
         {
-            if(player.HP <= 30)
+            float hp = player.get<HealthComponent>().HP;
+            if(hp <= 30)
                 pulseSpeed = 1f/120f; // 120Hz
-            else if(player.HP <= 50)
+            else if(hp <= 50)
                 pulseSpeed = 1f / 80f; // 40Hz
-            else if(player.HP <= 80)
+            else if(hp <= 80)
                 pulseSpeed = 1f/40f; // 40Hz
             else
                 pulseSpeed = 0;

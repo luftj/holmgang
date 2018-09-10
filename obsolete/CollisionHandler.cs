@@ -15,29 +15,30 @@ namespace holmgang.Desktop
         UNKNOWN,    // debug
     }
 
-    public class CollisionSystem
+    public class CollisionHandler
     {
         private RenderTarget2D objectMap;
-
         private Dictionary<Color, CollisionType> collisionMap;
+        private SpriteBatch spriteBatch;
+
 
         private TiledMap map;
         private TiledMapRenderer maprenderer;
         private Camera2D cam;
 
-        SpriteBatch spriteBatch;
 
-        public CollisionSystem(int width, int height, TiledMap map, TiledMapRenderer maprenderer, Camera2D cam)
+        public CollisionHandler(int width, int height, TiledMap map, Camera2D cam)
         {
+            this.map = map;
+            this.maprenderer = new TiledMapRenderer(GameSingleton.Instance.graphics);
+            this.cam = cam;
+
             objectMap = new RenderTarget2D(maprenderer.GraphicsDevice, width, height);
             collisionMap = new Dictionary<Color, CollisionType>();
             collisionMap.Add(Color.Blue, CollisionType.WATER);
             collisionMap.Add(Color.Black, CollisionType.NONE);
             collisionMap.Add(new Color(0, 0, 0, 0), CollisionType.NONE);
 
-            this.map = map;
-            this.maprenderer = maprenderer;
-            this.cam = cam;
             spriteBatch = new SpriteBatch(maprenderer.GraphicsDevice);
         }
 
@@ -75,6 +76,7 @@ namespace holmgang.Desktop
             //    foreach(var it in i.Tiles)
             //        Console.WriteLine(it.ToString());
             //}
+
             // call to end
         }
 
