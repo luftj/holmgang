@@ -19,7 +19,7 @@ namespace holmgang.Desktop
 
         public void draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            float hp = player.get<HealthComponent>().HP;
+            int hp = player.get<HealthComponent>().HP;
             spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], "HP: " + hp, Vector2.Zero, Color.White); // debug
             spriteBatch.Draw(ContentSupplier.Instance.textures["dot"], Mouse.GetState().Position.ToVector2(), Color.White);
 
@@ -27,6 +27,22 @@ namespace holmgang.Desktop
             {
                 spriteBatch.Draw(ContentSupplier.Instance.textures["hplow"], Vector2.Zero, 
                                  new Color(hp == 0 ? Color.Black : Color.DarkRed, hp == 0 ? 1f : getPulse()));
+            }
+
+            // draw equipped items
+            // todo: draw backdrop for equipment
+            var items = player.getAll<EquipmentComponent>();
+            Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width-10-16, 10);
+            foreach(var item in items)
+            {
+                Texture2D tex = null;
+
+                tex = ContentSupplier.Instance.textures[item.type];
+                if(tex != null)
+                {
+                    spriteBatch.Draw(tex, drawpos, Color.White);
+                }
+                drawpos.Y += 26;
             }
         }
 
@@ -36,7 +52,7 @@ namespace holmgang.Desktop
             if(hp <= 30)
                 pulseSpeed = 1f/120f; // 120Hz
             else if(hp <= 50)
-                pulseSpeed = 1f / 80f; // 40Hz
+                pulseSpeed = 1f / 80f; // 80Hz
             else if(hp <= 80)
                 pulseSpeed = 1f/40f; // 40Hz
             else

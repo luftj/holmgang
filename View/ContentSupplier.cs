@@ -14,7 +14,7 @@ namespace holmgang.Desktop
 
         private ContentManager con;
 
-        public Dictionary<string, Texture2D> textures;
+        public Dictionary<string, Texture2D> textures;// todo use generic getter?
         public Dictionary<string, SpriteFont> fonts;
         public Dictionary<string, TiledMap> maps;
         public Dictionary<string, Song> music;
@@ -48,6 +48,8 @@ namespace holmgang.Desktop
             ContentSupplier.Instance.textures.Add("char", con.Load<Texture2D>("char"));
             ContentSupplier.Instance.textures.Add("x", con.Load<Texture2D>("x"));
             ContentSupplier.Instance.textures.Add("dot", con.Load<Texture2D>("dot"));
+            ContentSupplier.Instance.textures.Add("sword", con.Load<Texture2D>("sword"));
+            ContentSupplier.Instance.textures.Add("shield", con.Load<Texture2D>("shield"));
             ContentSupplier.Instance.maps.Add("map",con.Load<TiledMap>("test2"));
             ContentSupplier.Instance.textures.Add("hplow", con.Load<Texture2D>("vignette800x480"));
             ContentSupplier.Instance.music.Add("music", con.Load<Song>("valris"));

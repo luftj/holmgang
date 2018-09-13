@@ -29,12 +29,12 @@ namespace holmgang.Desktop
 
         public CollisionSystem(EntityManager entityManager) : base(entityManager)
         {
-            this.map = ContentSupplier.Instance.maps["map"];
+            this.map = ContentSupplier.Instance.maps["map"]; // todo: get level from gamestate -> gamesingleton
             this.maprenderer = new TiledMapRenderer(GameSingleton.Instance.graphics);
 
 
-            objectMap = new RenderTarget2D(maprenderer.GraphicsDevice, 
-                                           maprenderer.GraphicsDevice.Viewport.Width, 
+            objectMap = new RenderTarget2D(maprenderer.GraphicsDevice,
+                                           maprenderer.GraphicsDevice.Viewport.Width,
                                            maprenderer.GraphicsDevice.Viewport.Height);
             collisionMap = new Dictionary<Color, CollisionType>();
             collisionMap.Add(Color.Blue, CollisionType.WATER);
@@ -47,33 +47,33 @@ namespace holmgang.Desktop
         public void update(GameTime gameTime)
         {
             this.cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
-            foreach(Entity e in entityManager.entities)
+            foreach(Entity e in entityManager.GetEntities<DamagingOnceComponent>())
             {
-                if(e.has<DamagingOnceComponent>())
+                var c = e.get<DamagingOnceComponent>();
+
+                foreach(Entity other in entityManager.entities)
                 {
-                    var c = e.get<DamagingOnceComponent>();
-
-                    foreach(Entity other in entityManager.entities)
+                    if(other == e || !other.has<HealthComponent>())
+                        continue;
+                    if(!c.alreadyDamaged.Contains(other))
                     {
-                        if(other == e || !other.has<HealthComponent>())
-                            continue;
-                        if(!c.alreadyDamaged.Contains(other))
+                        if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30)
                         {
-                            if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30)
-                            {
-                                other.get<HealthComponent>().doDamage(c.damage);
-                                if(other.get<HealthComponent>().HP <= 0)
-                                    entityManager.destroyEntity(other);
-                                c.alreadyDamaged.Add(other);
-                            }
-                        }
+                            bool hasShield = other.getAll<EquipmentComponent>().Exists(x => x.type == "shield");
+                            other.get<HealthComponent>().doDamage(hasShield ? c.damage/2 : c.damage);
 
+                            if(other.get<HealthComponent>().HP <= 0)
+                                entityManager.destroyEntity(other);
+                            c.alreadyDamaged.Add(other);
+                        }
                     }
+
                 }
+
             }
         }
 
-
+        #region mapcollision
         /// <summary>
         /// Begin drawing of backbuffer and handling of selectable objects.
         /// </summary>
@@ -139,7 +139,9 @@ namespace holmgang.Desktop
         {
             return getCollisionKey((int)pos.X, (int)pos.Y);
         }
+        #endregion
 
+        #region tilecollision
         public bool getPassable(Vector2 worldPos)
         {
             Vector2 isoPos = screenToIso(worldPos.X, worldPos.Y);
@@ -166,5 +168,6 @@ namespace holmgang.Desktop
 
             return new Vector2(isoX, isoY);
         }
+#endregion
     }
 }

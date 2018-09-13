@@ -17,7 +17,7 @@ namespace holmgang.Desktop
             // animate sprites here
         }
 
-        public void draw(GameTime gameTime, SpriteBatch spriteBatch, Camera2D cam)
+        public void draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach(Entity e in entityManager.entities)
             {

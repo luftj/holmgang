@@ -64,7 +64,6 @@
     <Compile Include="ECS\Systems\AISystem.cs" />
     <Compile Include="ECS\Components\ExpirationComponent.cs" />
     <Compile Include="ECS\Systems\ExpirationSystem.cs" />
-    <Compile Include="ECS\Components\EntityManager.cs" />
     <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="ECS\Systems\CollisionSystem.cs" />
     <Compile Include="ECS\Components\DamagingOnceComponent.cs" />
@@ -79,6 +78,9 @@
     <Compile Include="ECS\Components\AI\TextComponent.cs" />
     <Compile Include="ECS\Components\AI\FactionComponent.cs" />
     <Compile Include="ECS\Components\CameraComponent.cs" />
+    <Compile Include="ECS\Components\ItemComponent.cs" />
+    <Compile Include="ECS\EntityManager.cs" />
+    <Compile Include="ECS\Components\EquipmentComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

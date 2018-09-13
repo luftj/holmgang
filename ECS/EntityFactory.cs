@@ -20,7 +20,15 @@ namespace holmgang.Desktop
             ret.attach(new SpriteComponent("char"));
             ret.attach(new HealthComponent(100));
             ret.attach(new PlayerControlComponent());
+            return ret;
+        }
 
+        public static Entity createItem(Vector2 pos, string type, string name)
+        {
+            Entity ret = new Entity();
+            ret.attach(new TransformComponent(pos, 0f));
+            ret.attach(new SpriteComponent(type));
+            ret.attach(new ItemComponent(type,name));
             return ret;
         }
 
@@ -32,17 +40,16 @@ namespace holmgang.Desktop
             ret.attach(new HealthComponent(100));
             //ret.attach(new AIMoveToComponent(new Vector2(-300,200)));
             ret.attach(new AIGuardComponent(150f));
-
             return ret;
         }
 
-        public static Entity createAttack(Vector2 pos, Entity owner)
+        public static Entity createAttack(Vector2 pos, Entity owner, int damage)
         {
             Entity ret = new Entity();
             ret.attach(new TransformComponent(pos, 0f));
             ret.attach(new SpriteComponent("x"));
             ret.attach(new ExpirationComponent(0.7));
-            ret.attach(new DamagingOnceComponent(10, owner));
+            ret.attach(new DamagingOnceComponent(damage, owner));
             return ret;
         }
 

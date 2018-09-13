@@ -59,8 +59,10 @@ namespace holmgang.Desktop
             map = ContentSupplier.Instance.maps["map"];
             entityManager = new EntityManager();
             entityManager.entities.Add(EntityFactory.createPlayer(new Vector2(150, 150)));
-            entityManager.entities.Add(EntityFactory.createNPC(new Vector2(200, 0)));
+            entityManager.entities.Add(EntityFactory.createNPC(new Vector2(50, 50)));
             entityManager.entities.Add(EntityFactory.createCamera(cam));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(200,200),"sword","test"));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 200),"shield","test"));
             hud = new HUD(entityManager.GetEntities<PlayerControlComponent>()[0]);
         }
 
@@ -120,7 +122,7 @@ namespace holmgang.Desktop
             //maprenderer.Draw(map.GetLayer("collision")); // debug
 
             // game objects
-            entityManager.spriteDrawService.draw(gameTime, spriteBatch, cam);
+            entityManager.spriteDrawService.draw(gameTime, spriteBatch);
 
             spriteBatch.End();
             #endregion

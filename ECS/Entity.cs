@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 namespace holmgang.Desktop
 {
+    public class EntityException : Exception
+    {
+
+    }
+
     public class Entity
     {
         private static int idcounter = 0;
         int ID;
-        List<Component> components;
-        List<Component> removeList;
-        List<Component> addList;
+        List<Component> components { get; }
+        List<Component> removeList { get; }
+        List<Component> addList { get; }
 
         public Entity()
         {

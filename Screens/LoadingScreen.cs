@@ -8,9 +8,9 @@ namespace holmgang.Desktop
     {
         bool done = false;
 
-        public LoadingScreen()
-        {
-        }
+        //public LoadingScreen()
+        //{
+        //}
 
         public override void LoadContent()
         {

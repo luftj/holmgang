@@ -9,9 +9,9 @@ namespace holmgang.Desktop
     {
         public bool initialised = false;
 
-        public MainMenuScreen()
-        {
-        }
+        //public MainMenuScreen()
+        //{
+        //}
 
         public override void LoadContent()
         {
@@ -30,7 +30,7 @@ namespace holmgang.Desktop
                 initialised = true;
             }
             string bla = GameSingleton.Instance.settingsList.Find(x => x.key == "mastervol").curval;
-            MediaPlayer.Volume = (float)(Int32.Parse(bla))/100f; // todo: move this somewhere else -> separate soundhandler class?
+            MediaPlayer.Volume = (Int32.Parse(bla))/100f; // todo: move this somewhere else -> separate soundhandler class?
             base.Update(gameTime);
         }
     }

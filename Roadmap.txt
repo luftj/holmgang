@@ -5,14 +5,7 @@
 Concept
 -where to store ai behaviour in maps? [1]
 -equipped items as separate sprites with scenegraph? or exhaustive tilesets?
--sorld simulation outside viewport
-
-AI
-collision for ai 
--(offscreen)
-
-NPC
--factions/friend-or-foe
+-world simulation outside viewport
 
 UI
 -HUD
@@ -21,11 +14,6 @@ UI
 --inventory screen etc
 --dialog screens?
 
-menues
--options
---screen resolution
---fullscreen
--layouting
 
 Gamestate
 -start new game with:
@@ -35,7 +23,7 @@ Gamestate
 -save game
 
 Map handling
--load spawn points from object layer. consider [1]
+-load spawn points from object layer. -> point objects in object layer -> entityfactory interface. consider [1]
 
 Gameplay
 -character actions/states
@@ -46,11 +34,21 @@ Gameplay
 --roll
 --dash/sprint
 -equipment/items
---stats
---state
---equipping
---leveling
+[X]picking up items
+--equipping/unequipping items
+--dropping items
 --drawing equipped items
+--stats
+--state, condition
+--leveling
+--highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent>
+
+AI
+-pathfinding
+--navmesh?
+-more precise collision for ai (at least onscreen)
+-factions/friend-or-foe detection
+-collision with other characters
 
 Particle system and environmental effects
 -weapon swoosh
@@ -64,6 +62,12 @@ Environment interaction
 -using usable things?
 -movement speed -> place in collision layer of map
 
+menues
+-options
+--screen resolution
+--fullscreen
+-layouting
+
 =============
 =  Roadmap  =
 =============
@@ -71,7 +75,7 @@ Environment interaction
 v0.1
 
 v0.5 FIRST PLAYABLE
-- mayor gameplay implemented
+- major gameplay implemented
 - first level complete
 - asset pipeline complete
 

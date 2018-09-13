@@ -56,8 +56,8 @@ namespace holmgang.Desktop
 
         public class GameSettingList : GameSetting
         {
-            List<string> possibleValues;
-            int curitem;
+            List<string> possibleValues { get; }
+            //int curitem;
 
             public GameSettingList(string key, string value, params string[] possVals) : base(key, value)
             {
@@ -81,7 +81,7 @@ namespace holmgang.Desktop
             }
         }
 
-        List<GameSetting> settingsList;
+        List<GameSetting> settingsList { get; }
 
         public GameSettings()
         {

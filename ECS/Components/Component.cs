@@ -3,8 +3,8 @@ namespace holmgang.Desktop
 {
     public class Component
     {
-        public Component()
-        {
-        }
+        //public Component()
+        //{
+        //}
     }
 }

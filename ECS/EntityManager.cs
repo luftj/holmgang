@@ -58,5 +58,23 @@ namespace holmgang.Desktop
 
             return ret;
         }
+
+        public Entity getClosest<T>(Vector2 pos) where T : Component
+        {
+            var list = GetEntities<T>();
+            list = list.FindAll(x => x.has<TransformComponent>());
+            float leastDistance = float.MaxValue;
+            Entity ret = null;
+            foreach(var e in list)
+            {
+                float cur = (e.get<TransformComponent>().position - pos).Length();
+                if(cur < leastDistance)
+                {
+                    leastDistance = cur;
+                    ret = e;
+                }
+            }
+            return ret;
+        }
     }
 }
