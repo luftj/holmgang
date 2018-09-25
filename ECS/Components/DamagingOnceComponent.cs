@@ -8,6 +8,9 @@ namespace holmgang.Desktop
         public int damage;
         public List<Entity> alreadyDamaged;
 
+        public DamagingOnceComponent() :base()
+        {}
+
         public DamagingOnceComponent(int damage, Entity owner)
         {
             this.damage = damage;

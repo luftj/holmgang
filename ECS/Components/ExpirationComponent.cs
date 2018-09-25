@@ -5,6 +5,8 @@ namespace holmgang.Desktop
     {
         public double timeLeft; // in seconds
 
+        public ExpirationComponent():base(){}
+
         public ExpirationComponent(double timeLeft)
         {
             this.timeLeft = timeLeft;

@@ -3,8 +3,11 @@ namespace holmgang.Desktop
 {
     public class PlayerControlComponent : Component
     {
-        //public PlayerControlComponent()
-        //{
-        //}
+        public float movementSpeed = 100f; // px/s;
+        public float interactionDistance = 40f;
+
+        public PlayerControlComponent():base()
+        {
+        }
     }
 }

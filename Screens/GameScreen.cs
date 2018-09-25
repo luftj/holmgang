@@ -24,7 +24,7 @@ namespace holmgang.Desktop
         #region CONTROL
         KeyboardState prevKB;
         MouseState prevMS;
-
+        bool firstframe = true;
         #endregion
 
         #region MODEL
@@ -35,8 +35,14 @@ namespace holmgang.Desktop
         //ECS
         EntityManager entityManager;
 
-        public GameScreen()
+        //public GameScreen(EntityManager entityManager)
+        //{
+        //    this.entityManager = entityManager;
+        //}
+
+        public void init(EntityManager entityManager)
         {
+            this.entityManager = entityManager;
         }
 
         public override void Initialize()
@@ -50,27 +56,39 @@ namespace holmgang.Desktop
                                                             //game.GraphicsDevice.Viewport.Width, 
                                                             //game.GraphicsDevice.Viewport.Height);
 
-            cam = new Camera2D(GameSingleton.Instance.graphics);
+
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
             map = ContentSupplier.Instance.maps["map"];
-            entityManager = new EntityManager();
-            entityManager.entities.Add(EntityFactory.createPlayer(new Vector2(150, 150)));
-            entityManager.entities.Add(EntityFactory.createNPC(new Vector2(50, 50)));
-            entityManager.entities.Add(EntityFactory.createCamera(cam));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(200,200),"sword","test"));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 200),"shield","test"));
+
+            GameSingleton.Instance.startGame();
+
             hud = new HUD(entityManager.GetEntities<PlayerControlComponent>()[0]);
         }
 
         public override void Update(GameTime gameTime)
         {
             #region uiinput
-            if(Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Show<MainMenuScreen>();
+            if(!firstframe)
+            {
+                if(Keyboard.GetState().IsKeyDown(Keys.Escape) && prevKB.IsKeyUp(Keys.Escape))
+                {
+                    firstframe = true;
+                    Show<GameMenuScreen>();
+                }
+                if(Keyboard.GetState().IsKeyDown(Keys.I) && prevKB.IsKeyUp(Keys.I))
+                {
+                    firstframe = true;
+                    Show<InventoryScreen>();
+                }
+            } else
+            {
+                firstframe = false;
+                cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+            }
             #endregion
 
             hud.update(gameTime);
@@ -96,7 +114,7 @@ namespace holmgang.Desktop
             //Console.WriteLine(m.ToString() + "---" + collision.getPassable(m)); //m.X, m.Y));
             #endregion
 
-            entityManager.update(gameTime);
+            entityManager.update(gameTime); // all the magic happens here
 
             prevKB = Keyboard.GetState();
             prevMS = Mouse.GetState();

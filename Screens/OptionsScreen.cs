@@ -59,7 +59,7 @@ namespace holmgang.Desktop
             items[0].selected = true;
 
             //items.Add(new MenuItem("Save", saveOptions));
-            items.Add(new MenuItem("Back", Show<MainMenuScreen>));
+            items.Add(new MenuItem("Back", Show<MainMenuScreen>)); // todo: could be gamemenuscreen as well
         }
 
         private void saveOptions()

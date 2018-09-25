@@ -23,13 +23,16 @@ namespace holmgang.Desktop
             {
                 if(e.has<SpriteComponent>() && e.has<TransformComponent>())
                 {
-                    Color col = e.has<PlayerControlComponent>() ? Color.Blue : Color.White;
-                    Texture2D tex = ContentSupplier.Instance.textures[e.get<SpriteComponent>().spriteName];
-                    spriteBatch.Draw(texture: tex, 
-                                     position: e.get<TransformComponent>().position,
-                                     origin: tex.Bounds.Size.ToVector2()/2f,
-                                     rotation: e.get<TransformComponent>().orientation, 
-                                     color: col);
+                    Color col = e.has<PlayerControlComponent>() ? Color.Blue : Color.White; // debug
+                    foreach(var c in e.getAll<SpriteComponent>())
+                    {
+                        Texture2D tex = ContentSupplier.Instance.textures[c.spriteName];
+                        spriteBatch.Draw(texture: tex,
+                                         position: e.get<TransformComponent>().position,
+                                         origin: tex.Bounds.Size.ToVector2() / 2f,
+                                         rotation: e.get<TransformComponent>().orientation,
+                                         color: col);
+                    }
                 }
                 if(e.has<TextComponent>() && e.has<TransformComponent>())
                 {

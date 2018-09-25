@@ -11,7 +11,7 @@ namespace holmgang.Desktop
     public class Entity
     {
         private static int idcounter = 0;
-        int ID;
+        public int ID;
         List<Component> components { get; }
         List<Component> removeList { get; }
         List<Component> addList { get; }
@@ -77,5 +77,24 @@ namespace holmgang.Desktop
             return ret;
         }
 
+        public string saveEntity()
+        {
+            string ret = "<Entity>\n";
+            ret += "id:" + ID +"\n";
+            foreach(var c in components)
+                ret += c.saveComponent();
+            ret += "</Entity>\n";
+            return ret;
+        }
+
+        public Component getByID(int id)
+        {
+            foreach(var c in components)
+            {
+                if(c.ID == id)
+                    return c;
+            }
+            return null;
+        }
     }
 }

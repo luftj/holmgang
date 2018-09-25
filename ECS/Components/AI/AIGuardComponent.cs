@@ -6,6 +6,7 @@ namespace holmgang.Desktop
         public float triggerDistance;
         public bool handled = false;
 
+        public AIGuardComponent():base(){}
         public AIGuardComponent(float triggerDistance)
         {
             this.triggerDistance = triggerDistance;

@@ -15,6 +15,7 @@ namespace holmgang.Desktop
         AISystem aIService;
         public CollisionSystem collisionSystem;
         ControlSystem controlSystem;
+        SoundSystem soundSystem;
 
         public EntityManager()
         {
@@ -26,6 +27,12 @@ namespace holmgang.Desktop
             aIService = new AISystem(this);
             collisionSystem = new CollisionSystem(this);
             controlSystem = new ControlSystem(this);
+            soundSystem = new SoundSystem(this);
+        }
+
+        public void LoadContent()
+        {
+            collisionSystem.LoadContent();
         }
 
         public void destroyEntity(Entity e)
@@ -50,6 +57,8 @@ namespace holmgang.Desktop
             expirationSystem.update(gameTime);
             collisionSystem.update(gameTime);
             controlSystem.update(gameTime);
+
+            soundSystem.update();
         }
 
         public List<Entity> GetEntities<T>() where T : Component
@@ -75,6 +84,43 @@ namespace holmgang.Desktop
                 }
             }
             return ret;
+        }
+
+        public Entity getClosest<T>(Entity self) where T : Component
+        {
+            var list = GetEntities<T>();
+            list = list.FindAll(x => x.has<TransformComponent>());
+            float leastDistance = float.MaxValue;
+            Entity ret = null;
+            foreach(var e in list)
+            {
+                float cur = (e.get<TransformComponent>().position - self.get<TransformComponent>().position).Length();
+                if(cur < leastDistance)
+                {
+                    leastDistance = cur;
+                    ret = e;
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Saves the entities as string for storing game state.
+        /// </summary>
+        public string saveEntities()
+        {
+            string ret = "";
+            foreach(var e in entities)
+            {
+                ret += e.saveEntity();
+            }
+            return ret;
+        }
+
+        public void loadEntities(List<Entity> entities)
+        {
+            this.entities.Clear();
+            this.entities = entities;
         }
     }
 }

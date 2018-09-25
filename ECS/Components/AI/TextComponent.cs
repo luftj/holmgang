@@ -6,6 +6,7 @@ namespace holmgang.Desktop
         public string text;
         public string font;
 
+        public TextComponent():base(){}
         public TextComponent(string text, string font)
         {
             this.text = text;

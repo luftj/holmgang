@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Screens;
+using System.IO;
 
 namespace holmgang.Desktop
 {
@@ -18,6 +19,7 @@ namespace holmgang.Desktop
             base.LoadContent();
 
             items.Add(new MenuItem("start", Show<GameScreen>) { selected = true });
+            items.Add(new MenuItem("load game", loadGame) { active = true });
             items.Add(new MenuItem("options", Show<OptionsScreen>));
             items.Add(new MenuItem("end", Game1.EXIT));
         }
@@ -26,12 +28,20 @@ namespace holmgang.Desktop
         {
             if(!initialised)
             {
-                MediaPlayer.Play(ContentSupplier.Instance.music["music"]);
+                //MediaPlayer.Play(ContentSupplier.Instance.music["music"]);
                 initialised = true;
             }
             string bla = GameSingleton.Instance.settingsList.Find(x => x.key == "mastervol").curval;
-            MediaPlayer.Volume = (Int32.Parse(bla))/100f; // todo: move this somewhere else -> separate soundhandler class?
+            MediaPlayer.Volume = (Int32.Parse(bla))/100f; // todo: soundsystem object not available
             base.Update(gameTime);
+        }
+
+        public void loadGame()
+        {
+            string filepath = "save.txt";
+            var fh = new SavefileHandler(filepath);
+            fh.readFile();
+            GameSingleton.Instance.entityManager.loadEntities(fh.getResults());
         }
     }
 }

@@ -8,6 +8,7 @@ namespace holmgang.Desktop
         public float distance = 40;
         public Entity target;
 
+        public AIAttackComponent():base(){}
         public AIAttackComponent(Entity target)
         {
             this.target = target;

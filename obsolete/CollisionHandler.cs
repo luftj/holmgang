@@ -118,7 +118,7 @@ namespace holmgang.Desktop
             layer.TryGetTile((int)isoPos.X, (int)isoPos.Y, out tile);
             if(tile == null)
                 return false;
-            Console.WriteLine("id " + tile.Value.GlobalIdentifier);
+            //Console.WriteLine("id " + tile.Value.GlobalIdentifier);
             return tile.Value.GlobalIdentifier == 0;
         }
 

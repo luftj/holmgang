@@ -5,6 +5,7 @@ namespace holmgang.Desktop
     {
         public Entity target;
 
+        public AIFollowComponent():base(){}
         public AIFollowComponent(Entity target)
         {
             this.target = target;

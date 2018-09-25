@@ -29,7 +29,7 @@ namespace holmgang.Desktop
 
         public CollisionSystem(EntityManager entityManager) : base(entityManager)
         {
-            this.map = ContentSupplier.Instance.maps["map"]; // todo: get level from gamestate -> gamesingleton
+
             this.maprenderer = new TiledMapRenderer(GameSingleton.Instance.graphics);
 
 
@@ -44,6 +44,11 @@ namespace holmgang.Desktop
             spriteBatch = new SpriteBatch(maprenderer.GraphicsDevice);
         }
 
+        public void LoadContent()
+        {
+            this.map = ContentSupplier.Instance.maps["map"]; // todo: get level from gamestate -> gamesingleton
+        }
+
         public void update(GameTime gameTime)
         {
             this.cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
@@ -55,21 +60,26 @@ namespace holmgang.Desktop
                 {
                     if(other == e || !other.has<HealthComponent>())
                         continue;
-                    if(!c.alreadyDamaged.Contains(other))
+                    if(c.alreadyDamaged.Contains(other))
+                        continue;
+
+                    // check for proximity
+                    if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30) // todo magic number
                     {
-                        if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30)
+                        var shield = other.get<WieldingComponent>()?.wielding("shield"); // item reduces damage
+                        other.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
+
+                        if(other.get<HealthComponent>().HP <= 0)
                         {
-                            bool hasShield = other.getAll<EquipmentComponent>().Exists(x => x.type == "shield");
-                            other.get<HealthComponent>().doDamage(hasShield ? c.damage/2 : c.damage);
-
-                            if(other.get<HealthComponent>().HP <= 0)
-                                entityManager.destroyEntity(other);
-                            c.alreadyDamaged.Add(other);
+                            other.get<HealthComponent>().regPerS = 0;
+                            var camc = other.get<CameraComponent>();
+                            if(camc != null)
+                                entityManager.attachEntity(EntityFactory.createCamera(camc.camera));
+                            entityManager.destroyEntity(other); // u ded :(
                         }
+                        c.alreadyDamaged.Add(other); // don't damage again
                     }
-
                 }
-
             }
         }
 
@@ -152,7 +162,7 @@ namespace holmgang.Desktop
             layer.TryGetTile((int)isoPos.X, (int)isoPos.Y, out tile);
             if(tile == null)
                 return false;
-            Console.WriteLine("id " + tile.Value.GlobalIdentifier);
+            //Console.WriteLine("id " + tile.Value.GlobalIdentifier);
             return tile.Value.GlobalIdentifier == 0;
         }
 

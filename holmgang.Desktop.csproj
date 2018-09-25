@@ -81,6 +81,14 @@
     <Compile Include="ECS\Components\ItemComponent.cs" />
     <Compile Include="ECS\EntityManager.cs" />
     <Compile Include="ECS\Components\EquipmentComponent.cs" />
+    <Compile Include="Screens\InventoryScreen.cs" />
+    <Compile Include="ECS\Components\WieldingComponent.cs" />
+    <Compile Include="ECS\Components\CharacterComponent.cs" />
+    <Compile Include="ECS\Components\AI\AISimpleDialogueComponent.cs" />
+    <Compile Include="ECS\Components\SoundComponent.cs" />
+    <Compile Include="ECS\Systems\SoundSystem.cs" />
+    <Compile Include="Screens\GameMenuScreen.cs" />
+    <Compile Include="SavefileHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -170,6 +178,8 @@
     <None Include="obsolete\AI\AIWaitABit.cs" />
     <None Include="obsolete\IDrawable.cs" />
     <None Include="obsolete\IUpdatable.cs" />
+    <None Include="Content\OutlineEffect.fx" />
+    <None Include="Content\FillTexEffect.fx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />

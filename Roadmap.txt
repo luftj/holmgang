@@ -2,10 +2,66 @@
 =  Todo  =
 ==========
 
+*******************************
+* Rule no. 1:                 *
+* Don't prematurely optimise! *
+*******************************
+
 Concept
 -where to store ai behaviour in maps? [1]
 -equipped items as separate sprites with scenegraph? or exhaustive tilesets?
 -world simulation outside viewport
+
+Architecture/Technical Debt
+-merge itemcomponent and equipmentcomponent?
+
+Gamestate
+-start new game with:
+[X]-resetting state
+--loading from map
+[X]-resume game with loading from savestate
+[X]-save game
+
+Map handling
+-load spawn points from object layer. -> point objects in object layer -> entityfactory interface. consider [1]
+
+Gameplay
+-movement
+--velocity system -> needed for determining attack directions
+-character actions/states
+[/]--attacks
+---attack speed
+---attack directions? via current movement -> moving left: attack from left etc
+---ranged attack -> key for swapping melee/ranged then normal or holding key for aiming ranged, keyup->shoot/throw
+--block
+---block directions? (except shield)
+---backstab?
+--dash/sprint
+--roll (sideways dash) -> how to control?
+--duck?
+-equipment/items
+[/]--picking up items
+---auto equip
+[X]--item stacks
+[X]--equipping/unequipping items
+[/]--dropping items
+[X]---item stacks on ground?
+---inventory and iso texture for every item -> dynamic getter in contentsupplier
+--item classes etc
+[/]--drawing equipped items
+[/]--stats
+--state, condition
+--leveling
+--highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent>
+---border texture effect?
+
+AI
+-pathfinding
+--navmesh?
+-more precise collision for ai (at least onscreen)
+-factions/friend-or-foe detection
+--pull aggro when attacked
+-collision with other characters
 
 UI
 -HUD
@@ -14,59 +70,27 @@ UI
 --inventory screen etc
 --dialog screens?
 
-
-Gamestate
--start new game with:
---resetting state
---loading from map
--resume game with loading from savestate
--save game
-
-Map handling
--load spawn points from object layer. -> point objects in object layer -> entityfactory interface. consider [1]
-
-Gameplay
--character actions/states
---attacks
----attack speed
---duck?
---block
---roll
---dash/sprint
--equipment/items
-[X]picking up items
---equipping/unequipping items
---dropping items
---drawing equipped items
---stats
---state, condition
---leveling
---highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent>
-
-AI
--pathfinding
---navmesh?
--more precise collision for ai (at least onscreen)
--factions/friend-or-foe detection
--collision with other characters
-
 Particle system and environmental effects
 -weapon swoosh
 -blood
 -fire
--light and shadow -> apply effect when drawing map?
+-light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance)?
 
 Environment interaction
 -doors/map changes -> place in collision layer of map
 -talking to npc
+[X]simple speech: print text after interact
+--complex dialogue: trade etc
 -using usable things?
--movement speed -> place in collision layer of map
+-movement speedon different soil types -> place in collision layer of map
 
 menues
 -options
 --screen resolution
 --fullscreen
 -layouting
+-loadgamescreen with savegame selection
+-savegamescreen with filepath/savename specification?
 
 =============
 =  Roadmap  =
@@ -76,13 +100,20 @@ v0.1
 
 v0.5 FIRST PLAYABLE
 - major gameplay implemented
+-- fighting system
+-- inventory and equipment functionality
+-- story driven AI -> events & triggers changing AI behaviour
 - first level complete
+-- map changes (ie dungeon levels)
+-- loading entities from map
+-- environmental effects (e.g. lighting and fire)
 - asset pipeline complete
+-- pipeline tools programmed if needed -> enables productive content workflow
 
 v0.8 ALPHA
 -feature complete
-- playable
-- only tweaking of code from here
+- fully playable
+- only tweaking of code from here on
 - assets partially finished
 
 v0.9 BETA

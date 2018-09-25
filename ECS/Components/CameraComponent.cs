@@ -7,7 +7,11 @@ namespace holmgang.Desktop
     {
         public Camera2D camera;
 
-        public CameraComponent(Camera2D camera)
+        public CameraComponent():base()
+        {
+        }
+
+        public CameraComponent(Camera2D camera) : base()
         {
             this.camera = camera;
         }

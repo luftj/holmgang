@@ -30,6 +30,8 @@ namespace holmgang.Desktop
             _EXIT = true;
         }
 
+        ScreenGameComponent sgc;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,12 +44,14 @@ namespace holmgang.Desktop
 
             ContentSupplier.Instance.init(Content);
 
-            ScreenGameComponent sgc = new ScreenGameComponent(this);
+            sgc = new ScreenGameComponent(this);
             Components.Add(sgc);
             sgc.Register(new LoadingScreen()); // has to go first, for content loading
             sgc.Register(new MainMenuScreen());
             sgc.Register(new OptionsScreen());
             sgc.Register(new GameScreen());
+            sgc.Register(new GameMenuScreen());
+            sgc.Register(new InventoryScreen());
         }
 
         /// <summary>
@@ -58,7 +62,10 @@ namespace holmgang.Desktop
         /// </summary>
         protected override void Initialize()
         {
-            GameSingleton.Instance.init(GraphicsDevice);
+            GameSingleton.Instance.init(graphics.GraphicsDevice);
+            sgc.FindScreen<GameScreen>().init(GameSingleton.Instance.entityManager);
+            sgc.FindScreen<GameMenuScreen>().init(GameSingleton.Instance.entityManager);
+            sgc.FindScreen<InventoryScreen>().init(GameSingleton.Instance.entityManager);
 
             base.Initialize();
         }
@@ -69,6 +76,8 @@ namespace holmgang.Desktop
         /// </summary>
         protected override void LoadContent()
         {
+            //ContentSupplier.Instance.LoadContent();
+            GameSingleton.Instance.entityManager.LoadContent();
         }
 
         /// <summary>

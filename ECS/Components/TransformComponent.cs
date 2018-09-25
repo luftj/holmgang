@@ -8,6 +8,7 @@ namespace holmgang.Desktop
         public Vector2 position;
         public float orientation;
 
+        public TransformComponent():base(){}
         public TransformComponent(Vector2 position, float orientation)
         {
             this.position = position;

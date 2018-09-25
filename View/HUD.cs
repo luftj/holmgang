@@ -19,7 +19,7 @@ namespace holmgang.Desktop
 
         public void draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            int hp = player.get<HealthComponent>().HP;
+            var hp = player.get<HealthComponent>().HP;
             spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], "HP: " + hp, Vector2.Zero, Color.White); // debug
             spriteBatch.Draw(ContentSupplier.Instance.textures["dot"], Mouse.GetState().Position.ToVector2(), Color.White);
 
@@ -31,10 +31,13 @@ namespace holmgang.Desktop
 
             // draw equipped items
             // todo: draw backdrop for equipment
-            var items = player.getAll<EquipmentComponent>();
+            //var items = player.getAll<EquipmentComponent>();
+            EquipmentComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary };
             Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width-10-16, 10);
             foreach(var item in items)
             {
+                if(item == null)
+                    continue;
                 Texture2D tex = null;
 
                 tex = ContentSupplier.Instance.textures[item.type];
@@ -48,6 +51,7 @@ namespace holmgang.Desktop
 
         public void update(GameTime gameTime)
         {
+            player = GameSingleton.Instance.entityManager.GetEntities<PlayerControlComponent>()[0];
             float hp = player.get<HealthComponent>().HP;
             if(hp <= 30)
                 pulseSpeed = 1f/120f; // 120Hz

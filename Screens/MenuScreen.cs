@@ -12,6 +12,7 @@ namespace holmgang.Desktop
         protected string text;
         public Action action;
         public bool selected = false;
+        public bool active = true;
 
         public MenuItem(string text, Action action)
         {
@@ -21,7 +22,8 @@ namespace holmgang.Desktop
 
         public virtual void draw(GameTime gameTime, SpriteBatch spriteBatch, int pos)
         {
-            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], text, Vector2.UnitY * 20 * pos, selected ? Color.Yellow : Color.White);
+            Color col = selected ? Color.Yellow : (active ? Color.White : Color.Gray);
+            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], text, Vector2.UnitY * 20 * pos, col);
         }
     }
 
@@ -52,13 +54,16 @@ namespace holmgang.Desktop
 
                 if(Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKB.IsKeyUp(Keys.Enter))
                 {
-                    items[currentSelection].action.Invoke();
+                    items[currentSelection].action?.Invoke();
                 }
 
                 if(Keyboard.GetState().IsKeyDown(Keys.Down) && prevKB.IsKeyUp(Keys.Down))
                 {
                     items[currentSelection].selected = false;
                     currentSelection++;
+
+                    while(currentSelection<items.Count && !items[currentSelection].active)
+                        currentSelection++;
                     if(currentSelection >= items.Count)
                         currentSelection = items.Count -1 ;
                     items[currentSelection].selected = true;
@@ -67,8 +72,10 @@ namespace holmgang.Desktop
                 {
                     items[currentSelection].selected = false;
                     currentSelection--;
+                    while(currentSelection >= 0 && !items[currentSelection].active)
+                        currentSelection--;
                     if(currentSelection < 0)
-                        currentSelection = 0;
+                        currentSelection = 0; // todo: what if 0 is inactive?
                     items[currentSelection].selected = true;
                 }
             }

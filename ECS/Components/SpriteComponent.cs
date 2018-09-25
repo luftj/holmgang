@@ -5,9 +5,13 @@ namespace holmgang.Desktop
     {
         public string spriteName;
 
-        public SpriteComponent(string spriteName)
+        public int layer;
+
+        public SpriteComponent() : base(){}
+        public SpriteComponent(string spriteName, int layer=1)
         {
             this.spriteName = spriteName;
+            this.layer = layer;
         }
     }
 }
