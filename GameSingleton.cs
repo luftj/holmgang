@@ -121,8 +121,9 @@ namespace holmgang.Desktop
         public void startGame()
         {
             entityManager.entities.Clear();
+
             MonoGame.Extended.Camera2D cam = new MonoGame.Extended.Camera2D(GameSingleton.Instance.graphics);
-            entityManager.entities.Add(EntityFactory.createPlayerWithCam(new Vector2(220, 220), cam));
+            entityManager.entities.Add(EntityFactory.createPlayerWithCam(new Vector2(300, 280), cam));
             //entityManager.entities.Add(EntityFactory.createPlayer(new Vector2(220, 220)));
             entityManager.entities.Add(EntityFactory.createNPC(new Vector2(50, 50)));
             entityManager.entities.Add(EntityFactory.createCiv(new Vector2(-150, 250)));

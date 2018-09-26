@@ -94,6 +94,8 @@ namespace holmgang.Desktop
             Entity ret = null;
             foreach(var e in list)
             {
+                if(e == self)
+                    continue;
                 float cur = (e.get<TransformComponent>().position - self.get<TransformComponent>().position).Length();
                 if(cur < leastDistance)
                 {

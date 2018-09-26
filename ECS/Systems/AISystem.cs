@@ -32,7 +32,7 @@ namespace holmgang.Desktop
                         dir.Normalize(); //zero vector -> NaN
                         dir *= (speed * (float)gameTime.ElapsedGameTime.TotalSeconds); // todo: delta time
 
-                        aiMove(e, 
+                        aiMove(e,
                                dir);
 
                     } else if(c is AILookAtComponent)
@@ -46,7 +46,7 @@ namespace holmgang.Desktop
                     } else if(c is AIGuardComponent)
                     {
                         Entity target = entityManager.getClosest<PlayerControlComponent>(e.get<TransformComponent>().position);
-                        if((target.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() > ((AIGuardComponent)c).triggerDistance)
+                        if(target == null || (target.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() > ((AIGuardComponent)c).triggerDistance)
                             continue;
                         entityManager.attachEntity(EntityFactory.createSpeech("HOLD IT!", e));
 

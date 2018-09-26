@@ -55,8 +55,6 @@ namespace holmgang.Desktop
             //var viewportAdapter = new BoxingViewportAdapter(game.Window, game.GraphicsDevice, 
                                                             //game.GraphicsDevice.Viewport.Width, 
                                                             //game.GraphicsDevice.Viewport.Height);
-
-
         }
 
         public override void LoadContent()
@@ -93,7 +91,7 @@ namespace holmgang.Desktop
 
             hud.update(gameTime);
 
-            maprenderer.Update(map, gameTime); // todo: needed? animated tiles?
+            //maprenderer.Update(map, gameTime); // todo: needed? animated tiles?
 
             #region debug
             if(Keyboard.GetState().IsKeyDown(Keys.Add) && prevKB.IsKeyUp(Keys.Add))
@@ -112,6 +110,11 @@ namespace holmgang.Desktop
             //Console.WriteLine(collision.getCollisionKey(cam.WorldToScreen(player.pos + move * player.speed)));
             //Vector2 m = cam.ScreenToWorld((float)Mouse.GetState().X, (float)Mouse.GetState().Y);
             //Console.WriteLine(m.ToString() + "---" + collision.getPassable(m)); //m.X, m.Y));
+            //var dolay = map.GetLayer<TiledMapObjectLayer>("doors");
+            //var ob = dolay.Objects[0];
+            //Console.WriteLine(ob.Position + " --- " + ob.Size);
+            //foreach(var i in ob.Properties)
+                //Console.WriteLine(i.Key + i.Value);
             #endregion
 
             entityManager.update(gameTime); // all the magic happens here
@@ -137,7 +140,7 @@ namespace holmgang.Desktop
 
             // map
             maprenderer.Draw(map.GetLayer("Tile Layer 1"), cam.GetViewMatrix());
-            //maprenderer.Draw(map.GetLayer("collision")); // debug
+            //maprenderer.Draw(map.GetLayer("collision"), cam.GetViewMatrix()); // debug
 
             // game objects
             entityManager.spriteDrawService.draw(gameTime, spriteBatch);

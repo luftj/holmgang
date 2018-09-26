@@ -9,16 +9,17 @@
 
 Concept
 -where to store ai behaviour in maps? [1]
--equipped items as separate sprites with scenegraph? or exhaustive tilesets?
+-equipped items as separate sprites with scenegraph? or exhaustive tilesets? [2]
 -world simulation outside viewport
 
 Architecture/Technical Debt
--merge itemcomponent and equipmentcomponent?
+[X]-merge itemcomponent and equipmentcomponent?
+-savefilehandler: maybe implement ISerialisable in Component, instead of relying on defalt ctor?
 
 Gamestate
--start new game with:
+[ ]-start new game with:
 [X]-resetting state
---loading from map
+[ ]--loading from map
 [X]-resume game with loading from savestate
 [X]-save game
 
@@ -28,6 +29,7 @@ Map handling
 Gameplay
 -movement
 --velocity system -> needed for determining attack directions
+--slide along obstacles
 -character actions/states
 [/]--attacks
 ---attack speed
@@ -40,15 +42,16 @@ Gameplay
 --roll (sideways dash) -> how to control?
 --duck?
 -equipment/items
-[/]--picking up items
----auto equip
+[ ]--inventory and iso texture for every item -> dynamic getter in contentsupplier
+[X]--picking up items
+[X]---auto equip
 [X]--item stacks
 [X]--equipping/unequipping items
-[/]--dropping items
-[X]---item stacks on ground?
----inventory and iso texture for every item -> dynamic getter in contentsupplier
+[X]--dropping items
+[X]---item stacks on ground
 --item classes etc
 [/]--drawing equipped items
+[ ]---consider [2]
 [/]--stats
 --state, condition
 --leveling
@@ -60,29 +63,30 @@ AI
 --navmesh?
 -more precise collision for ai (at least onscreen)
 -factions/friend-or-foe detection
---pull aggro when attacked
+[X]--pull aggro when attacked
+--change faction relation when aggro is pulled
 -collision with other characters
 
 UI
 -HUD
 --runes
--other
---inventory screen etc
---dialog screens?
+[ ]-other
+[X]--inventory screen etc
+[ ]--dialog screens? trade?
 
 Particle system and environmental effects
 -weapon swoosh
 -blood
 -fire
--light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance)?
+-light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
 
 Environment interaction
--doors/map changes -> place in collision layer of map
+-doors/map changes -> place in object layer of map
 -talking to npc
-[X]simple speech: print text after interact
+[X]--simple speech: print text after interact
 --complex dialogue: trade etc
 -using usable things?
--movement speedon different soil types -> place in collision layer of map
+-movement speed on different soil types -> place in collision layer of map
 
 menues
 -options
@@ -115,6 +119,7 @@ v0.8 ALPHA
 - fully playable
 - only tweaking of code from here on
 - assets partially finished
+- multiplayer
 
 v0.9 BETA
 -code freeze -> only bugfixing from here on out

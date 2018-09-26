@@ -30,16 +30,16 @@ namespace holmgang.Desktop
             string filepath = "save.txt";   //todo think of some clever way to input this
 
             File.WriteAllText(filepath, entityManager.saveEntities());
-            using(StreamWriter file =
-                  new StreamWriter(filepath, true))
-            {
-                file.WriteLine("Fourth line");
-            }
+            //using(StreamWriter file =
+            //      new StreamWriter(filepath, true))
+            //{
+            //    file.WriteLine("Fourth line");
+            //}
         }
 
         public void loadGame()
         {
-            string filepath = "save.txt";
+            string filepath = "save.txt";   //todo think of some clever way to input this
             var fh = new SavefileHandler(filepath);
             fh.readFile();
             GameSingleton.Instance.entityManager.loadEntities(fh.getResults());

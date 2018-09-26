@@ -21,30 +21,6 @@
 /processorParam:TextureFormat=Compressed
 /build:testfont.spritefont
 
-#begin isometric_grass_and_water.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:isometric_grass_and_water.png
-
-#begin isometric_grass_and_water_coll.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:isometric_grass_and_water_coll.png
-
 #begin char.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -80,11 +56,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:dot.png
-
-#begin test2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:test2.tmx
 
 #begin vignette800x600.png
 /importer:TextureImporter
@@ -157,4 +128,62 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:coin.png
+
+#begin isometric_grass_and_water.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:isometric_grass_and_water.png
+
+#begin isometric_grass_and_water_collision.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:isometric_grass_and_water_collision.png
+
+#begin test2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test2.tmx
+
+#begin isometric_grass_and_water_coll.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:isometric_grass_and_water_coll.png
+
+#begin tmw_desert_spacing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tmw_desert_spacing.png
+
+#begin test3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:test3.tmx
 

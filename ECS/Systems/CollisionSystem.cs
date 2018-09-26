@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -39,6 +40,7 @@ namespace holmgang.Desktop
             collisionMap = new Dictionary<Color, CollisionType>();
             collisionMap.Add(Color.Blue, CollisionType.WATER);
             collisionMap.Add(Color.Black, CollisionType.NONE);
+            collisionMap.Add(new Color(0, 255, 0, 255), CollisionType.NONE);
             collisionMap.Add(new Color(0, 0, 0, 0), CollisionType.NONE);
 
             spriteBatch = new SpriteBatch(maprenderer.GraphicsDevice);
@@ -51,7 +53,7 @@ namespace holmgang.Desktop
 
         public void update(GameTime gameTime)
         {
-            this.cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+            this.cam = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
             foreach(Entity e in entityManager.GetEntities<DamagingOnceComponent>())
             {
                 var c = e.get<DamagingOnceComponent>();
@@ -78,6 +80,19 @@ namespace holmgang.Desktop
                             entityManager.destroyEntity(other); // u ded :(
                         }
                         c.alreadyDamaged.Add(other); // don't damage again
+
+                        // pull aggro
+                        if(!other.has<PlayerControlComponent>())
+                        {
+                            if(!other.has<AIAttackComponent>())
+                            {
+                                other.attach(new AIAttackComponent(c.alreadyDamaged[0])); // target owner of attack
+                            }
+                            if(!other.has<AIFollowComponent>())
+                            {
+                                other.attach(new AIFollowComponent(c.alreadyDamaged[0])); // target owner of attack
+                            }
+                        }
                     }
                 }
             }
@@ -109,8 +124,11 @@ namespace holmgang.Desktop
         public void handleMap()
         {
             // call to begin
-
-            maprenderer.Draw(map.GetLayer("collision"), cam.GetViewMatrix());
+            var c = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+            var collisionlayer = map.GetLayer("collision");
+            if(collisionlayer == null)
+                return;
+            maprenderer.Draw(collisionlayer, c.GetViewMatrix());
 
             //foreach(var i in map.TileLayers)
             //{
@@ -158,12 +176,15 @@ namespace holmgang.Desktop
             //Console.WriteLine("map " + isoPos.ToPoint().ToString());
 
             TiledMapTileLayer layer = map.GetLayer<TiledMapTileLayer>("collision");
+            if(layer == null)
+                return true;
             TiledMapTile? tile;
             layer.TryGetTile((int)isoPos.X, (int)isoPos.Y, out tile);
             if(tile == null)
                 return false;
             //Console.WriteLine("id " + tile.Value.GlobalIdentifier);
-            return tile.Value.GlobalIdentifier == 0;
+            int[] ids = { 0, 73, 78, 80, 95 };  // todo: oh hell no
+            return ids.Contains(tile.Value.GlobalIdentifier); 
         }
 
         private Vector2 screenToIso(float screenX, float screenY)

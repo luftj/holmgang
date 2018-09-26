@@ -5,7 +5,7 @@ namespace holmgang.Desktop
 {
     public class AISimpleDialogueComponent : BehaviourComponent
     {
-        List<string> speechs;
+        public List<string> speechs;
         int cur = 0;
         float cooldown = 3f; // in seconds
         float timer = 0f;

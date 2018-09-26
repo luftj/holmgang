@@ -32,7 +32,7 @@ namespace holmgang.Desktop
             // draw equipped items
             // todo: draw backdrop for equipment
             //var items = player.getAll<EquipmentComponent>();
-            EquipmentComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary };
+            ItemComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary };
             Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width-10-16, 10);
             foreach(var item in items)
             {

@@ -19,14 +19,14 @@ namespace holmgang.Desktop
         int curSelection = 0;
 
         Entity player;
-        List<EquipmentComponent> inventoryItems;
+        List<ItemComponent> inventoryItems;
         EntityManager entityManager;
 
         bool firstframe = true;
 
         public InventoryScreen()
         {
-            inventoryItems = new List<EquipmentComponent>();
+            inventoryItems = new List<ItemComponent>();
             //this.entityManager = entityManager;
 
         }
@@ -61,7 +61,7 @@ namespace holmgang.Desktop
             if(entityManager.GetEntities<PlayerControlComponent>().Count != 1)
                 throw new NotSupportedException("Uh-oh.. shouldn't be more or less than one player component");
             player = entityManager.GetEntities<PlayerControlComponent>()[0];
-            inventoryItems = player.getAll<EquipmentComponent>();
+            inventoryItems = player.getAll<ItemComponent>();
 
             if(Keyboard.GetState().IsKeyDown(Keys.Right) && prevKB.IsKeyUp(Keys.Right))
             {
@@ -85,20 +85,8 @@ namespace holmgang.Desktop
             {
                 // equip/unequip
                 if(curSelection < inventoryItems.Count)
-                {   // don't equip both
-
-                    // unequip primary
-                    if(player.get<WieldingComponent>().primary == inventoryItems[curSelection])
-                        player.get<WieldingComponent>().primary = null;
-                    // unequip secondary
-                    else if(player.get<WieldingComponent>().secondary == inventoryItems[curSelection])
-                        player.get<WieldingComponent>().secondary = null;
-                    // equip primary
-                    else if(player.get<WieldingComponent>().primary == null)
-                        player.get<WieldingComponent>().primary = inventoryItems[curSelection];
-                    // equip secondary
-                    else if(player.get<WieldingComponent>().secondary == null)
-                        player.get<WieldingComponent>().secondary = inventoryItems[curSelection];
+                {
+                    player.get<WieldingComponent>().equip(inventoryItems[curSelection]);
                 }
             }
             if(Keyboard.GetState().IsKeyDown(Keys.G) && prevKB.IsKeyUp(Keys.G))
@@ -106,20 +94,15 @@ namespace holmgang.Desktop
                 // dropping items
                 if(curSelection < inventoryItems.Count)
                 {
-                    EquipmentComponent item = inventoryItems[curSelection];
-                    // unequip
-                    if(player.get<WieldingComponent>().primary == inventoryItems[curSelection])
-                        player.get<WieldingComponent>().primary = null;
-                    // unequip secondary
-                    else if(player.get<WieldingComponent>().secondary == inventoryItems[curSelection])
-                        player.get<WieldingComponent>().secondary = null;
+                    ItemComponent item = inventoryItems[curSelection];
 
+                    player.get<WieldingComponent>().unequip(item);
                     player.detach(item); // remove from player
-                    Entity droppedItem = EntityFactory.createItem(player.get<TransformComponent>().position,
-                                                                  item.type,
-                                                                  item.name,
-                                                                  item.effect);
-                    droppedItem.get<ItemComponent>().amount = item.amount; // might be a stack
+
+                    Entity droppedItem = new Entity();
+                    droppedItem.attach(new TransformComponent(player.get<TransformComponent>().position, player.get<TransformComponent>().orientation));
+                    droppedItem.attach(new SpriteComponent(item.type));
+                    droppedItem.attach(item);
                     entityManager.attachEntity(droppedItem); // place in world
                 }
             }

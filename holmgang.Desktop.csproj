@@ -80,7 +80,6 @@
     <Compile Include="ECS\Components\CameraComponent.cs" />
     <Compile Include="ECS\Components\ItemComponent.cs" />
     <Compile Include="ECS\EntityManager.cs" />
-    <Compile Include="ECS\Components\EquipmentComponent.cs" />
     <Compile Include="Screens\InventoryScreen.cs" />
     <Compile Include="ECS\Components\WieldingComponent.cs" />
     <Compile Include="ECS\Components\CharacterComponent.cs" />

@@ -32,13 +32,13 @@ namespace holmgang.Desktop
                 initialised = true;
             }
             string bla = GameSingleton.Instance.settingsList.Find(x => x.key == "mastervol").curval;
-            MediaPlayer.Volume = (Int32.Parse(bla))/100f; // todo: soundsystem object not available
+            MediaPlayer.Volume = (Int32.Parse(bla))/100f; // todo: soundsystem object not available here
             base.Update(gameTime);
         }
 
         public void loadGame()
         {
-            string filepath = "save.txt";
+            string filepath = "save.txt"; // todo
             var fh = new SavefileHandler(filepath);
             fh.readFile();
             GameSingleton.Instance.entityManager.loadEntities(fh.getResults());

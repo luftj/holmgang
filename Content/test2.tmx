@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.6" orientation="isometric" renderorder="right-down" width="25" height="25" tilewidth="64" tileheight="32" infinite="0" nextobjectid="2">
+<map version="1.0" tiledversion="1.1.6" orientation="isometric" renderorder="right-down" width="25" height="25" tilewidth="64" tileheight="32" infinite="0" nextobjectid="4">
  <tileset firstgid="1" name="isometric_grass_and_water" tilewidth="64" tileheight="64" tilecount="24" columns="4">
   <tileoffset x="0" y="16"/>
   <grid orientation="isometric" width="64" height="32"/>
@@ -78,6 +78,7 @@
   </wangsets>
  </tileset>
  <tileset firstgid="25" source="isometric_grass_and_water_coll.tsx"/>
+ <tileset firstgid="73" source="isometric_grass_and_water_collision.tsx"/>
  <layer name="Tile Layer 1" width="25" height="25">
   <data encoding="base64" compression="zlib">
    eJx1ltmOgzAMRQPNdJuulGn5/y+dIPlIB0MfrBYSb9fXNlMpZWryafLb5BVyiXeTzvO9y4bOlPSsP8utyS7kKJ1Jtu5NDk26uPNu8myyj+d78ofuPenW8DMq7vmsj/Odfh9hZ4jzXu+JfZBN7vBMLoPec4YfYj/ovEoXfIivbvw/hv6PMNlJqn4daxUO59Cz7Sosck75viXHB15g2ZUlTruIfR+/1yYn1Qb/uT5Vdsybm86wC07vsE08OQ/sW8/YjSkuakj9eDbvwde1sR5+weGkmpNHX9b1HJMPc9I6uZ7kMMjnNWLrpEss2HUf3xJe33KgP+gl423+2b59GIOquri3iGUs67rmmfLZ8GHOErvjPsue+3Iqy/4nxzwf4TxYPZLvrbi3+Ox54XzyDHPPDcknM5H7s72Xns0zz1Xz3dzIebhumXe5H/uy7Dtw9AwAS3DO8wrdPumxU3xOLPO9v7LcF2AIVp84827y3nBM8NO94JlMD5mT2DHXwCjjbt7nXniWdY+ehQN5bO2gb3vE+cAbeAb3ch+NZTnbiddz2rXIO8V7mnn+Sr5GYcgdvgM8v3KO3h+eJ8YbP95v17LmIXPcPvMOM4efEux0ZT1H8tzwN9Q7xeL6+h7fSbP8A1deGSg=
@@ -85,12 +86,15 @@
  </layer>
  <layer name="collision" width="25" height="25">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjILBB5zpYD4Iu9PYDg862OFOQzuQw4nadjgzYJpPC38gm02r+BiIcKKmPdjMpoVd2OKAlnE/3AEA1S8N6Q==
+   eJydlVFuAzEIRH29xNpuNmma/LTp/U9RR2Kkpyk421riwzYwMGD8aK09Qi5DbiHvOHe5QGevjeRjyCHkZDb0tULnPOQ65C32GV5m+5TjkDt0eNdDDtBhfDzP7oihXDIdYSj21e7Jwwyjh+7TfgEnPe49rw475nIOuwyHtoqL+n2i33fytYQ/5bC9qA3PxPV3giG/5HRDPFXesnMe70lcp2Tvfc9+7WbHuiwRX8VT1Yf+nrwGXo8GDPaNc7D9EYN2xKj6rMqhwlBdxHGG4ThZPSoM519cyZ/7Yp321sPnivYVjs/HbM6tOzE0E1fz5/OHd7fEP3vDMWa9y/dYzQzOAOe56qOj2VUxyP+n8cg3zXr8Z/bzbZMnxjzDcN4r3jKeOGu2CcYs5ipf/vHe447Rk3hnuNkf71it/X7XX5FrNr9mf1L2pwlDOPLr/8W15Zj8MxbT83poVbPPF32wvtX6ATC9vpE=
   </data>
  </layer>
- <objectgroup name="Object Layer 1">
+ <objectgroup name="objects">
   <object id="1" x="414.5" y="477.5">
    <polygon points="36,20 87.5,-27.5 76,-194 35,-195 9.5,-231.5 -1.5,-226.5 -15,-265 -37.5,-268.5 -97.5,-258.5 -109.5,-142.5 -133,-121 -134.5,-89.5 -109.5,-68.5 -101,-23 -48,-10 -37.5,15.5"/>
   </object>
+ </objectgroup>
+ <objectgroup name="doors">
+  <object id="2" name="door1" x="690" y="574" width="57.3333" height="45.3333"/>
  </objectgroup>
 </map>

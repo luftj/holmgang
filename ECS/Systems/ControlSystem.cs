@@ -23,7 +23,7 @@ namespace holmgang.Desktop
                 throw new NotSupportedException("Uh-oh.. shouldn't be more or less than one camera component");
 
             Entity e = entityManager.GetEntities<PlayerControlComponent>()[0];
-            var hc = e.get<HealthComponent>(); // todo: put hp reg somewhere als and for all characters
+            var hc = e.get<HealthComponent>(); // todo: put hp reg somewhere else and for all characters
             if(hc.HP < 100f)
                 hc.HP += (hc.regPerS * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -58,12 +58,15 @@ namespace holmgang.Desktop
                     {
                         // pick up item
                         var itemcomp = item.get<ItemComponent>();
-                        var sametype = e.getAll<EquipmentComponent>().Find(x => x.type == itemcomp.type);
+                        var sametype = e.getAll<ItemComponent>().Find(x => x.type == itemcomp.type);
                         if(sametype != null && itemcomp.stackable)
                         {
                             ++sametype.amount; // stack item
                         } else
-                            e.attach(new EquipmentComponent(itemcomp)); // put in inventory instead
+                        {
+                            e.attach(itemcomp); // put in inventory instead
+                            e.get<WieldingComponent>()?.equip(itemcomp);
+                        }
                         entityManager.destroyEntity(item);
                     }
                 }
