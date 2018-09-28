@@ -34,7 +34,7 @@ namespace holmgang.Desktop
         public void init(EntityManager entityManager)
         {
             this.entityManager = entityManager;
-            numEntriesX = GameSingleton.Instance.graphics.Viewport.Width / entriesWidth;
+            numEntriesX = (int)(GameSingleton.Instance.graphics.Viewport.Width * 2/3f) / entriesWidth;
         }
 
         public override void LoadContent()
@@ -63,6 +63,7 @@ namespace holmgang.Desktop
             player = entityManager.GetEntities<PlayerControlComponent>()[0];
             inventoryItems = player.getAll<ItemComponent>();
 
+            #region navigateinventory
             if(Keyboard.GetState().IsKeyDown(Keys.Right) && prevKB.IsKeyUp(Keys.Right))
             {
                 ++curSelection;
@@ -81,6 +82,7 @@ namespace holmgang.Desktop
                 if(curSelection > numEntriesX -1)
                     curSelection -= numEntriesX; // row up
             }
+#endregion
             if(Keyboard.GetState().IsKeyDown(Keys.Enter) && prevKB.IsKeyUp(Keys.Enter))
             {
                 // equip/unequip
@@ -101,11 +103,18 @@ namespace holmgang.Desktop
 
                     Entity droppedItem = new Entity();
                     droppedItem.attach(new TransformComponent(player.get<TransformComponent>().position, player.get<TransformComponent>().orientation));
-                    droppedItem.attach(new SpriteComponent(item.type));
+                    droppedItem.attach(new SpriteComponent(item.name));
                     droppedItem.attach(item);
                     entityManager.attachEntity(droppedItem); // place in world
                 }
             }
+            if(Keyboard.GetState().IsKeyDown(Keys.E) && prevKB.IsKeyUp(Keys.E))
+            {
+                // using items
+                if(curSelection < inventoryItems.Count)
+                    inventoryItems[curSelection].use();
+            }
+
 
             prevKB = Keyboard.GetState();
             prevMS = Mouse.GetState();
@@ -125,9 +134,10 @@ namespace holmgang.Desktop
                 int xpos = i % numEntriesX;
                 int ypos = i / numEntriesX;
 
-                spriteBatch.Draw(ContentSupplier.Instance.textures[inventoryItems[i].type],
+                Color col = Color.Lerp(Color.Red, Color.White, inventoryItems[i].durability / (float)inventoryItems[i].maxDurability); // color red when damaged
+                spriteBatch.Draw(ContentSupplier.Instance.textures[inventoryItems[i].name],
                                  new Rectangle(xpos * entriesWidth, ypos * entriesHeight, entriesWidth, entriesHeight),
-                                 Color.White);
+                                 col);
                 // print stack size
                 if(inventoryItems[i].stackable && inventoryItems[i].amount > 1)
                 {
@@ -165,6 +175,10 @@ namespace holmgang.Desktop
                                                 entriesWidth, entriesHeight),
                                  Color.Red);
 
+            //todo: draw controls
+            Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width * 2 / 3f, 0);
+            string legendtext = "ARROWS = choose\nENTER = equip/unequip\ng = drop\ne = use\ni/ESC = back to game";
+            spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], legendtext, drawpos, Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -128,12 +128,12 @@ namespace holmgang.Desktop
             entityManager.entities.Add(EntityFactory.createNPC(new Vector2(50, 50)));
             entityManager.entities.Add(EntityFactory.createCiv(new Vector2(-150, 250)));
             //entityManager.entities.Add(EntityFactory.createCamera(cam));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(200, 200), "sword", "test", 50));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 200), "shield", "test", 5));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(200, 200), "MELEE", "sword", 50));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 200), "BLOCK", "shield", 5));
 
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 330), "coin", "test", 1));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 360), "coin", "test", 1));
-            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 590), "coin", "test", 1));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 330), "MISC", "coin", 1));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 360), "MISC", "coin", 1));
+            entityManager.entities.Add(EntityFactory.createItem(new Vector2(250, 590), "MISC", "coin", 1));
         }
 
         public void changeSetting(string key, string value)

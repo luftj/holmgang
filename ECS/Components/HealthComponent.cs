@@ -1,6 +1,7 @@
 ﻿using System;
 namespace holmgang.Desktop
 {
+    [OnlyOne]
     public class HealthComponent : Component
     {
         public float HP;

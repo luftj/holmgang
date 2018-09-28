@@ -9,10 +9,14 @@ namespace holmgang.Desktop
         ANTI,
     }
 
+    [OnlyOne]
     public class CharacterComponent : Component
     {
         CharacterFaction faction;
         public float movementSpeed = 64f; // in px per s
+        public const float maxSpeed = 64f; // todo needed?
+
+        public bool isBlocking = false;
 
         public CharacterComponent() : base()
         {

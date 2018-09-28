@@ -3,6 +3,7 @@ using MonoGame.Extended;
 
 namespace holmgang.Desktop
 {
+    [OnlyOne]
     public class CameraComponent : Component
     {
         public Camera2D camera;

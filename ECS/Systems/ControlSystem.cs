@@ -103,22 +103,27 @@ namespace holmgang.Desktop
 
         private void playerAttack(Entity player)
         {
+            if(player.get<PlayerControlComponent>().isBlocking) // can't attack while blocking
+                return;
+
             var trans = player.get<TransformComponent>();
             Vector2 atpos = new Vector2((float)Math.Cos(trans.orientation), (float)Math.Sin(trans.orientation));
-            atpos *= 30f;
+            atpos *= 30f; // todo magic number -> get reach from equipped item or if none, from playercomponent
             atpos += trans.position;
-            var sword = player.get<WieldingComponent>().wielding("sword");
+            var sword = player.get<WieldingComponent>().wielding("MELEE");
             entityManager.attachEntity(EntityFactory.createAttack(atpos, player, sword != null ? sword.effect : 10));
         }
 
         private void playerBlock(Entity player)
         {
+            // todo: only block if has shield equipped
             player.attach(new SpriteComponent("shield"));
-            //todo: save state somewhere, so damage handling can take this into account
+            player.get<PlayerControlComponent>().isBlocking = true;
         }
         private void playerUnblock(Entity player)
         {
             player.detach(player.getAll<SpriteComponent>().Find(x => x.spriteName == "shield"));
+            player.get<PlayerControlComponent>().isBlocking = false;
         }
 
         private void playerMove(Entity player, Vector2 move, float deltaS)

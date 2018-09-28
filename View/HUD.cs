@@ -40,7 +40,7 @@ namespace holmgang.Desktop
                     continue;
                 Texture2D tex = null;
 
-                tex = ContentSupplier.Instance.textures[item.type];
+                tex = ContentSupplier.Instance.textures[item.name];
                 if(tex != null)
                 {
                     spriteBatch.Draw(tex, drawpos, Color.White);

@@ -3,7 +3,19 @@ using System.Collections.Generic;
 
 namespace holmgang.Desktop
 {
-    public class Component
+    [AttributeUsage(AttributeTargets.Class)]
+    public class OnlyOneAttribute : Attribute
+    {
+    }
+
+    public class OnlyOneException : Exception
+    {
+        public OnlyOneException(Component c) : base(
+            "Oooooonnnly oooooone!\nThere can be only on component of this type attached to an entity. Component type: " 
+            + c.GetType()){}
+    }
+
+    public abstract class Component
     {
         public static int idcounter = 0;
         public int ID; // use this for references when saving state
@@ -18,7 +30,7 @@ namespace holmgang.Desktop
         //    // make sure idcounter fits
         //}
 
-        public virtual string saveComponent()
+        public virtual string serialise()
         {
             string ret = "<" + this.GetType().ToString() + ">\n";
             foreach(var field in this.GetType().GetFields())
@@ -52,7 +64,7 @@ namespace holmgang.Desktop
                             if(i == list.Count - 1)
                                 ret += "\n";
                             else
-                                ret += "|"; // todo: maybe use another separator
+                                ret += "|";
                         }
                     }
                 }

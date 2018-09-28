@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace holmgang.Desktop
 {
+    [OnlyOne]
     public class TransformComponent : Component
     {
         public Vector2 position;

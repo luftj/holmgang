@@ -15,6 +15,8 @@ Concept
 Architecture/Technical Debt
 [X]-merge itemcomponent and equipmentcomponent?
 -savefilehandler: maybe implement ISerialisable in Component, instead of relying on defalt ctor?
+-field visibility of components
+--some come into conflict with deserialisation -> deserialise method?
 
 Gamestate
 [ ]-start new game with:
@@ -24,6 +26,7 @@ Gamestate
 [X]-save game
 
 Map handling
+-decouple tiledmap handling
 -load spawn points from object layer. -> point objects in object layer -> entityfactory interface. consider [1]
 
 Gameplay
@@ -35,9 +38,11 @@ Gameplay
 ---attack speed
 ---attack directions? via current movement -> moving left: attack from left etc
 ---ranged attack -> key for swapping melee/ranged then normal or holding key for aiming ranged, keyup->shoot/throw
---block
+---push back enemies (especially when they block)
+[/]block
 ---block directions? (except shield)
 ---backstab?
+---damage shield
 --dash/sprint
 --roll (sideways dash) -> how to control?
 --duck?
@@ -49,16 +54,17 @@ Gameplay
 [X]--equipping/unequipping items
 [X]--dropping items
 [X]---item stacks on ground
---item classes etc
+[ ]--item classes etc
 [/]--drawing equipped items
 [ ]---consider [2]
 [/]--stats
---state, condition
+[X]--state, condition
 --leveling
 --highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent>
 ---border texture effect?
 
 AI
+-behaviour statemachine?
 -pathfinding
 --navmesh?
 -more precise collision for ai (at least onscreen)

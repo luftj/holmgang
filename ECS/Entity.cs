@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace holmgang.Desktop
 {
-    public class EntityException : Exception
-    {
-
-    }
-
     public class Entity
     {
         private static int idcounter = 0;
@@ -37,9 +33,14 @@ namespace holmgang.Desktop
         //    var entity = obj as Entity;
         //    return entity != null && ID == entity.ID;
         //}
-
+        
         public void attach(Component c)
         {
+            if(c.GetType().IsDefined(typeof(OnlyOneAttribute),true))
+            {
+                if(components.Exists(x => (x.GetType() == c.GetType())))
+                    throw new OnlyOneException(c);
+            }
             components.Add(c);
         }
 
@@ -48,14 +49,19 @@ namespace holmgang.Desktop
             components.Remove(c);
         }
 
-        public bool has<T>() where T : class 
+        public bool has<T>() where T : Component 
         {
             if(components.Exists(x => (x is T)))
                 return true;
             else return false;
         }
 
-        public T get<T>() where T : class 
+        /// <summary>
+        /// Gets first component of type T in this entity.
+        /// </summary>
+        /// <returns>First occurence or null.</returns>
+        /// <typeparam name="T">The component type.</typeparam>
+        public T get<T>() where T : Component 
         {
             return components.Find(x => x is T) as T;
             //if(ret.Count == 1)
@@ -66,15 +72,16 @@ namespace holmgang.Desktop
 
         public List<T> getAll<T>() where T : Component 
         {
-            List<Component> bla = components.FindAll(x => x is T);
-            List < T > ret = new List<T>();
-            foreach(var item in bla)
-            {
-                ret.Add((T)item); // this is really strange... should be able to cast lists with given constraint?
-            }
-            //var ret = bla as List<T>;
+            //List<Component> all = 
+            return components.FindAll(x => x is T).Cast<T>().ToList();
+            //List<T> ret = all.Cast<T>().ToList(); //new List<T>();
+            //foreach(var item in all)
+            //{
+            //    ret.Add((T)item); // this is really strange... should be able to cast lists with given constraint?
+            //}
+            //var ret = all as List<T>;
             //var ret = (List<T>)bla;
-            return ret;
+            //return ret;
         }
 
         public string saveEntity()
@@ -82,7 +89,7 @@ namespace holmgang.Desktop
             string ret = "<Entity>\n";
             ret += "id:" + ID +"\n";
             foreach(var c in components)
-                ret += c.saveComponent();
+                ret += c.serialise();
             ret += "</Entity>\n";
             return ret;
         }

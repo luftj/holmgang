@@ -50,7 +50,7 @@ namespace holmgang.Desktop
         {
             this.map = ContentSupplier.Instance.maps["map"]; // todo: get level from gamestate -> gamesingleton
         }
-
+        
         public void update(GameTime gameTime)
         {
             this.cam = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
@@ -64,11 +64,30 @@ namespace holmgang.Desktop
                         continue;
                     if(c.alreadyDamaged.Contains(other))
                         continue;
+                    c.alreadyDamaged.Add(other); // don't damage again
 
                     // check for proximity
                     if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30) // todo magic number
                     {
-                        var shield = other.get<WieldingComponent>()?.wielding("shield"); // item reduces damage
+                        if(other.get<PlayerControlComponent>()?.isBlocking ?? false) // don't do damage when blocking
+                        {
+                            if(other.get<WieldingComponent>().secondary == null)
+                                continue;
+                            other.get<WieldingComponent>().secondary.damage(c.damage);
+                            if(other.get<WieldingComponent>().secondary.durability <= 0)
+                            {
+                                other.get<WieldingComponent>().unequip(other.get<WieldingComponent>().secondary);
+                                other.detach(other.getAll<SpriteComponent>().Find(x => x.spriteName == "shield"));
+                                other.get<PlayerControlComponent>().isBlocking = false;
+                            }
+                            continue;
+                        } else if(other.get<CharacterComponent>()?.isBlocking ?? false)
+                        {
+                            other.get<WieldingComponent>().secondary.durability -= c.damage;
+                            continue;
+                        }
+
+                        var shield = other.get<WieldingComponent>()?.wielding("BLOCK"); // item reduces damage
                         other.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
 
                         if(other.get<HealthComponent>().HP <= 0)
@@ -79,11 +98,11 @@ namespace holmgang.Desktop
                                 entityManager.attachEntity(EntityFactory.createCamera(camc.camera));
                             entityManager.destroyEntity(other); // u ded :(
                         }
-                        c.alreadyDamaged.Add(other); // don't damage again
-
+                        
                         // pull aggro
                         if(!other.has<PlayerControlComponent>())
                         {
+                            // follow and attack if not doing already
                             if(!other.has<AIAttackComponent>())
                             {
                                 other.attach(new AIAttackComponent(c.alreadyDamaged[0])); // target owner of attack

@@ -14,7 +14,7 @@ namespace holmgang.Desktop
 
         private ContentManager con;
 
-        public Dictionary<string, Texture2D> textures;// todo use generic getter?
+        public Dictionary<string, Texture2D> textures;// todo: use generic getter?
         public Dictionary<string, SpriteFont> fonts;
         public Dictionary<string, TiledMap> maps;
         public Dictionary<string, Song> music;

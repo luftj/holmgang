@@ -40,7 +40,7 @@ namespace holmgang.Desktop
         {
             Entity ret = new Entity();
             ret.attach(new TransformComponent(pos, 0f));
-            ret.attach(new SpriteComponent(type));
+            ret.attach(new SpriteComponent(name));      // todo think of something clever to query sprite name from itemcomponent
             ret.attach(new ItemComponent(type,name,effect));
             return ret;
         }

@@ -181,7 +181,6 @@
     <None Include="Content\FillTexEffect.fx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="View\" />
     <Folder Include="Control\" />
     <Folder Include="Screens\" />
