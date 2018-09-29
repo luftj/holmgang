@@ -76,8 +76,7 @@ namespace holmgang.Desktop
         /// </summary>
         protected override void LoadContent()
         {
-            //ContentSupplier.Instance.LoadContent();
-            GameSingleton.Instance.entityManager.LoadContent();
+            base.LoadContent();
         }
 
         /// <summary>

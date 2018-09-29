@@ -8,22 +8,25 @@
 *******************************
 
 Concept
--where to store ai behaviour in maps? [1]
+-how to store ai behaviour in maps? [1]
 -equipped items as separate sprites with scenegraph? or exhaustive tilesets? [2]
 -world simulation outside viewport
 
 Architecture/Technical Debt
 [X]-merge itemcomponent and equipmentcomponent?
 -savefilehandler: maybe implement ISerialisable in Component, instead of relying on defalt ctor?
--field visibility of components
+-field visibility in components
 --some come into conflict with deserialisation -> deserialise method?
 
 Gamestate
-[ ]-start new game with:
 [X]-resetting state
-[ ]--loading from map
 [X]-resume game with loading from savestate
 [X]-save game
+[X]-store map in savegame
+[ ]-loading entities from map
+--store entity names/types in map
+--entityfactory createfromstring method takes pos and type/name
+--call above when loading savestate
 
 Map handling
 -decouple tiledmap handling
@@ -32,17 +35,19 @@ Map handling
 Gameplay
 -movement
 --velocity system -> needed for determining attack directions
---slide along obstacles
+[X]--slide along obstacles
 -character actions/states
 [/]--attacks
 ---attack speed
 ---attack directions? via current movement -> moving left: attack from left etc
----ranged attack -> key for swapping melee/ranged then normal or holding key for aiming ranged, keyup->shoot/throw
+[/]---ranged attack -> for aiming ranged, keyup->shoot/throw (other method: key for swapping melee/ranged then normal or holding key)
+[----draw aiming help line
 ---push back enemies (especially when they block)
 [/]block
 ---block directions? (except shield)
 ---backstab?
----damage shield
+[X]---damage shield
+---reduce movement speed
 --dash/sprint
 --roll (sideways dash) -> how to control?
 --duck?
@@ -54,7 +59,7 @@ Gameplay
 [X]--equipping/unequipping items
 [X]--dropping items
 [X]---item stacks on ground
-[ ]--item classes etc
+[/]--item classes etc
 [/]--drawing equipped items
 [ ]---consider [2]
 [/]--stats
@@ -67,11 +72,12 @@ AI
 -behaviour statemachine?
 -pathfinding
 --navmesh?
--more precise collision for ai (at least onscreen)
+[X]-more precise collision for ai (at least onscreen)
 -factions/friend-or-foe detection
 [X]--pull aggro when attacked
 --change faction relation when aggro is pulled
 -collision with other characters
+--collidercomponent (enables different map storage as well)
 
 UI
 -HUD
@@ -87,7 +93,7 @@ Particle system and environmental effects
 -light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
 
 Environment interaction
--doors/map changes -> place in object layer of map
+-doors/map changes -> place triggers in object layer of map
 -talking to npc
 [X]--simple speech: print text after interact
 --complex dialogue: trade etc

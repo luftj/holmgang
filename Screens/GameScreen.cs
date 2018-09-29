@@ -60,7 +60,7 @@ namespace holmgang.Desktop
         public override void LoadContent()
         {
             base.LoadContent();
-            map = ContentSupplier.Instance.maps["map"];
+            map = ContentSupplier.Instance.maps[GameSingleton.Instance.currentmap];
 
             GameSingleton.Instance.startGame();
 
@@ -86,6 +86,7 @@ namespace holmgang.Desktop
             {
                 firstframe = false;
                 cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+                map = GameSingleton.Instance.map;
             }
             #endregion
 

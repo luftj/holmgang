@@ -41,11 +41,13 @@ namespace holmgang.Desktop
                 if(components.Exists(x => (x.GetType() == c.GetType())))
                     throw new OnlyOneException(c);
             }
+            c.setOwner(this);
             components.Add(c);
         }
 
         public void detach(Component c)
         {
+            c.setOwner(null);   // throw exceptions, when this component is still referenced somewhere
             components.Remove(c);
         }
 

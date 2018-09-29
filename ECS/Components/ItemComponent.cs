@@ -1,7 +1,7 @@
 ﻿using System;
 namespace holmgang.Desktop
 {
-    public enum ItemTypes
+    public enum ItemType
     {
         NONE =0,
         MELEE,
@@ -16,7 +16,7 @@ namespace holmgang.Desktop
     public class ItemComponent : Component
     {
         public string name;
-        public string type; // TODO: convert to enum?
+        public ItemType type;
         public int effect;
         public int amount = 1;
         public bool stackable = true; // todo: max stack size?
@@ -24,9 +24,11 @@ namespace holmgang.Desktop
         public int durability = 100;
         public int maxDurability = 100;
 
+        public float reach = 40f;
+
         public ItemComponent():base(){}
 
-        public ItemComponent(string type, string name, int effect)
+        public ItemComponent(ItemType type, string name, int effect)
         {
             this.type = type;
             this.name = name;
@@ -42,8 +44,15 @@ namespace holmgang.Desktop
         public void damage(int damage)
         {
             durability -= damage;
-            if(durability < 0)
+            if(durability <= 0)
+            {
                 durability = 0;
+                owner.get<WieldingComponent>().unequip(this); // consider: can unequipped items get damaged?
+                if(type == ItemType.BLOCK)
+                {
+                    owner.get<CharacterComponent>()?.unblock();
+                }
+            }
         }
     }
 }

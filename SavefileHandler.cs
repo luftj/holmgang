@@ -28,6 +28,7 @@ namespace holmgang.Desktop
         Type currentComponentType;
         bool inEntity = false;
         bool inComponent = false;
+        bool inMap = false;
         List<UnresolvedCompRef> unresolvedCompRefs;
         List<UnresolvedEntityRef> unresolvedEntityRefs;
 
@@ -42,6 +43,22 @@ namespace holmgang.Desktop
             unresolvedEntityRefs = new List<UnresolvedEntityRef>();
         }
 
+        public void saveMap()
+        {
+            File.Delete(filepath);
+            string print = "<Map>\n" + GameSingleton.Instance.currentmap + "\n</Map>";
+            using(StreamWriter file =
+                  new StreamWriter(filepath, true))
+            {
+                file.WriteLine(print);
+            }
+        }
+
+        public void saveEntities(EntityManager em)
+        {
+            File.AppendAllText(filepath, em.saveEntities());
+        }
+
         public void readFile()
         {
             foreach(var line in File.ReadLines(filepath))
@@ -52,7 +69,16 @@ namespace holmgang.Desktop
 
         public void readLine(string line)
         {
-            if(line == "<Entity>")
+            if(line == "<Map>")
+            {
+                inMap = true;
+            } else if(line == "</Map>")
+            {
+                inMap = false;
+            } else if(inMap)
+            {
+                GameSingleton.Instance.setMap(line);
+            }else if(line == "<Entity>")
             {
                 currentEntity = new Entity();
                 inEntity = true;
@@ -87,46 +113,54 @@ namespace holmgang.Desktop
                 }
             } else if(inComponent)
             {
-                //todo can/should this go to component class?
-                var kvp = line.Split(":".ToCharArray(),count:2);
-                var fi = currentComponent.GetType().GetField(kvp[0]);
-                if(kvp[0] == "id")
-                {   //make sure ids dont get reused
-                    if(Component.idcounter <= Int32.Parse(kvp[1]))
-                        Component.idcounter = Int32.Parse(kvp[1]);
-                }
-                if(fi.FieldType == typeof(Int32))
-                    fi.SetValue(currentComponent, Int32.Parse(kvp[1]));
-                else if(fi.FieldType == typeof(Single))
-                    fi.SetValue(currentComponent, Single.Parse(kvp[1]));
-                else if(fi.FieldType == typeof(String))
-                    fi.SetValue(currentComponent, kvp[1]);
-                else if(fi.FieldType == typeof(Vector2))
-                    fi.SetValue(currentComponent, parseVector2(kvp[1]));
-                else if(fi.FieldType == typeof(Camera2D))
-                    fi.SetValue(currentComponent, new Camera2D(GameSingleton.Instance.graphics));
-                else if(fi.FieldType.BaseType == typeof(Component))
-                {
-                    if(kvp[1] != "null")
-                        unresolvedCompRefs.Add(new UnresolvedCompRef() {
-                            c = currentComponent,
-                            finfo = fi,
-                            id = Int32.Parse(kvp[1])
-                        });
-                }
-                else if(fi.FieldType == typeof(Entity))
-                {
-                    unresolvedEntityRefs.Add(new UnresolvedEntityRef() {
+                handleField(line);
+            }
+        }
+
+        private void handleField(string line)
+        {
+            //todo can/should this go to component class?
+            var kvp = line.Split(":".ToCharArray(), count: 2);
+            var fi = currentComponent.GetType().GetField(kvp[0]);
+            if(kvp[0] == "id")
+            {   //make sure ids dont get reused
+                if(Component.idcounter <= Int32.Parse(kvp[1]))
+                    Component.idcounter = Int32.Parse(kvp[1]);
+            }
+            if(fi.FieldType == typeof(Int32))
+                fi.SetValue(currentComponent, Int32.Parse(kvp[1]));
+            else if(fi.FieldType == typeof(Single))
+                fi.SetValue(currentComponent, Single.Parse(kvp[1]));
+            else if(fi.FieldType == typeof(String))
+                fi.SetValue(currentComponent, kvp[1]);
+            else if(fi.FieldType == typeof(Vector2))
+                fi.SetValue(currentComponent, parseVector2(kvp[1]));
+            else if(fi.FieldType == typeof(Camera2D))
+                fi.SetValue(currentComponent, new Camera2D(GameSingleton.Instance.graphics));
+            else if(fi.FieldType.BaseType == typeof(Enum))
+            {
+                Type enumtype = fi.FieldType;
+                fi.SetValue(currentComponent, Enum.Parse(enumtype, kvp[1]));
+            }
+            else if(fi.FieldType.BaseType == typeof(Component))
+            {
+                if(kvp[1] != "null")
+                    unresolvedCompRefs.Add(new UnresolvedCompRef() {
                         c = currentComponent,
                         finfo = fi,
                         id = Int32.Parse(kvp[1])
                     });
-                }
-                else if(fi.FieldType == typeof(List<string>))
-                {
-                    var list = new List<string>(kvp[1].Split('|'));
-                    fi.SetValue(currentComponent, list);
-                }
+            } else if(fi.FieldType == typeof(Entity))
+            {
+                unresolvedEntityRefs.Add(new UnresolvedEntityRef() {
+                    c = currentComponent,
+                    finfo = fi,
+                    id = Int32.Parse(kvp[1])
+                });
+            } else if(fi.FieldType == typeof(List<string>))
+            {
+                var list = new List<string>(kvp[1].Split('|'));
+                fi.SetValue(currentComponent, list);
             }
         }
 

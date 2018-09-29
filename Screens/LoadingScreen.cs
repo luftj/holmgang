@@ -16,8 +16,8 @@ namespace holmgang.Desktop
         {
             base.LoadContent();
 
-
-            ContentSupplier.Instance.LoadContent(); // todo: this goes into loadingscreen
+            ContentSupplier.Instance.LoadContent(); // this goes into loadingscreen for working around the ctor->initialise->loadcontent hassle
+            GameSingleton.Instance.LoadContent();
             done = true;
         }
 

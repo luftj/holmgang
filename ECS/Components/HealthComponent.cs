@@ -5,7 +5,7 @@ namespace holmgang.Desktop
     public class HealthComponent : Component
     {
         public float HP;
-        int maxHP;
+        int maxHP = 100;    // todo: doesn't get set be deserialise
         public float regPerS = 1f;
 
         public HealthComponent() : base()
@@ -23,8 +23,19 @@ namespace holmgang.Desktop
             if(amount <= 0)
                 return;
             HP -= amount;
-            if(HP < 0)
+
+            if(HP <= 0)
+            {
                 HP = 0;
+                regPerS = 0;
+            }
+        }
+
+        public void regen(float deltaS)
+        {
+            HP += regPerS * deltaS;
+            if(HP > maxHP)
+                HP = maxHP;
         }
 
         //public override string saveComponent()

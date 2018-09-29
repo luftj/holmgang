@@ -28,8 +28,11 @@ namespace holmgang.Desktop
             Console.WriteLine(entityManager.saveEntities());
 
             string filepath = "save.txt";   //todo think of some clever way to input this
+            var fh = new SavefileHandler(filepath);
+            fh.saveMap();// store current map
+            fh.saveEntities(entityManager);
 
-            File.WriteAllText(filepath, entityManager.saveEntities());
+            //File.WriteAllText(filepath, entityManager.saveEntities());
             //using(StreamWriter file =
             //      new StreamWriter(filepath, true))
             //{

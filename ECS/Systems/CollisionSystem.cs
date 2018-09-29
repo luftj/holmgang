@@ -48,73 +48,103 @@ namespace holmgang.Desktop
 
         public void LoadContent()
         {
-            this.map = ContentSupplier.Instance.maps["map"]; // todo: get level from gamestate -> gamesingleton
+            this.map = ContentSupplier.Instance.maps[GameSingleton.Instance.currentmap]; // get level from gamestate
         }
         
         public void update(GameTime gameTime)
         {
             this.cam = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
-            foreach(Entity e in entityManager.GetEntities<DamagingOnceComponent>())
+            handleDamage();
+            foreach(var projectile in entityManager.GetEntities<ProjectileComponent>()) // todo: put this somewhere else
             {
-                var c = e.get<DamagingOnceComponent>();
+                var transform = projectile.get<TransformComponent>();
+                transform.position += projectile.get<ProjectileComponent>().velocity;
+            }
+        }
 
-                foreach(Entity other in entityManager.entities)
+        public void handleDamage()
+        {
+            foreach(Entity damagingEffect in entityManager.GetEntities<DamagingOnceComponent>())
+            {   // damage handling
+                var c = damagingEffect.get<DamagingOnceComponent>();
+
+                foreach(Entity affectedEntity in entityManager.GetEntities<HealthComponent>())
                 {
-                    if(other == e || !other.has<HealthComponent>())
+                    if(affectedEntity == damagingEffect || c.alreadyDamaged.Contains(affectedEntity))
                         continue;
-                    if(c.alreadyDamaged.Contains(other))
-                        continue;
-                    c.alreadyDamaged.Add(other); // don't damage again
 
                     // check for proximity
-                    if((other.get<TransformComponent>().position - e.get<TransformComponent>().position).Length() < 30) // todo magic number
+                    if(affectedEntity.get<TransformComponent>().distance(damagingEffect.get<TransformComponent>())> 30) // magic_number get from weapon reach? sprite collision?
+                        continue;
+                    c.alreadyDamaged.Add(affectedEntity); // don't damage again
+                                                          // don't do damage when blocking
+                    var shield = affectedEntity.get<WieldingComponent>()?.wielded(ItemType.BLOCK);
+                    if(shield != null && (affectedEntity.get<CharacterComponent>()?.isBlocking ?? false))
                     {
-                        if(other.get<PlayerControlComponent>()?.isBlocking ?? false) // don't do damage when blocking
-                        {
-                            if(other.get<WieldingComponent>().secondary == null)
-                                continue;
-                            other.get<WieldingComponent>().secondary.damage(c.damage);
-                            if(other.get<WieldingComponent>().secondary.durability <= 0)
-                            {
-                                other.get<WieldingComponent>().unequip(other.get<WieldingComponent>().secondary);
-                                other.detach(other.getAll<SpriteComponent>().Find(x => x.spriteName == "shield"));
-                                other.get<PlayerControlComponent>().isBlocking = false;
-                            }
-                            continue;
-                        } else if(other.get<CharacterComponent>()?.isBlocking ?? false)
-                        {
-                            other.get<WieldingComponent>().secondary.durability -= c.damage;
-                            continue;
-                        }
+                        shield.damage(c.damage);  // damage shield
+                        continue;   // don't do hp damage
+                    }
 
-                        var shield = other.get<WieldingComponent>()?.wielding("BLOCK"); // item reduces damage
-                        other.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
+                    affectedEntity.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
 
-                        if(other.get<HealthComponent>().HP <= 0)
+                    // pull aggro
+                    if(!affectedEntity.has<PlayerControlComponent>()) // todo: only for NPCs, could there be other entities with healthcomponent?
+                    {
+                        // follow and attack if not doing already
+                        if(!affectedEntity.has<AIAttackComponent>())
                         {
-                            other.get<HealthComponent>().regPerS = 0;
-                            var camc = other.get<CameraComponent>();
-                            if(camc != null)
-                                entityManager.attachEntity(EntityFactory.createCamera(camc.camera));
-                            entityManager.destroyEntity(other); // u ded :(
+                            affectedEntity.attach(new AIAttackComponent(c.alreadyDamaged[0])); // target owner of attack
                         }
-                        
-                        // pull aggro
-                        if(!other.has<PlayerControlComponent>())
+                        if(!affectedEntity.has<AIFollowComponent>())
                         {
-                            // follow and attack if not doing already
-                            if(!other.has<AIAttackComponent>())
-                            {
-                                other.attach(new AIAttackComponent(c.alreadyDamaged[0])); // target owner of attack
-                            }
-                            if(!other.has<AIFollowComponent>())
-                            {
-                                other.attach(new AIFollowComponent(c.alreadyDamaged[0])); // target owner of attack
-                            }
+                            affectedEntity.attach(new AIFollowComponent(c.alreadyDamaged[0])); // target owner of attack
                         }
                     }
                 }
             }
+        }
+
+        public Vector2 tryMove(Vector2 origin, Vector2 target)
+        {
+            if(origin == target)
+                return target;
+            var screentarget = cam.WorldToScreen(target);
+            if(inScreen(target) && inScreen(origin))
+            {
+                // use collision key
+                if(getCollisionKey(screentarget) == CollisionType.NONE)
+                    return target;
+                else
+                {
+                    // can't get there
+                    Vector2 onlyX = target;
+                    onlyX.Y = origin.Y;
+                    if(getCollisionKey(cam.WorldToScreen(onlyX)) == CollisionType.NONE)
+                        return onlyX;
+                    Vector2 onlyY = target;
+                    onlyY.X = origin.X;
+                    if(getCollisionKey(cam.WorldToScreen(onlyY)) == CollisionType.NONE)
+                        return onlyY;
+                    Console.WriteLine(getCollisionKey(screentarget));
+                    return origin;
+                }
+            } else
+            {
+                // use tile collision
+                if(getPassable(target))
+                    return target;
+                else
+                {
+                    // can't get there
+                    return origin;
+                }
+            }
+        }
+
+        bool inScreen(Vector2 point)
+        {
+            //Rectangle vp = GameSingleton.Instance.graphics.Viewport.Bounds;
+            return cam.BoundingRectangle.Contains(point);
         }
 
         #region mapcollision
@@ -143,11 +173,13 @@ namespace holmgang.Desktop
         public void handleMap()
         {
             // call to begin
-            var c = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+            if(GameSingleton.Instance.entityManager.GetEntities<CameraComponent>().Count > 0)  // camera not still in addlist
+                cam = GameSingleton.Instance.entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
+            map = GameSingleton.Instance.map;
             var collisionlayer = map.GetLayer("collision");
             if(collisionlayer == null)
                 return;
-            maprenderer.Draw(collisionlayer, c.GetViewMatrix());
+            maprenderer.Draw(collisionlayer, cam.GetViewMatrix());
 
             //foreach(var i in map.TileLayers)
             //{
@@ -191,7 +223,7 @@ namespace holmgang.Desktop
         #region tilecollision
         public bool getPassable(Vector2 worldPos)
         {
-            Vector2 isoPos = screenToIso(worldPos.X, worldPos.Y);
+            Vector2 isoPos = worldToIso(worldPos.X, worldPos.Y);
             //Console.WriteLine("map " + isoPos.ToPoint().ToString());
 
             TiledMapTileLayer layer = map.GetLayer<TiledMapTileLayer>("collision");
@@ -206,15 +238,15 @@ namespace holmgang.Desktop
             return ids.Contains(tile.Value.GlobalIdentifier); 
         }
 
-        private Vector2 screenToIso(float screenX, float screenY)
+        private Vector2 worldToIso(float worldX, float worldY)
         {
             float tileW = map.TileWidth;
             float tileH = map.TileHeight;
             if(map.Orientation == TiledMapOrientation.Isometric)
                 tileW = tileH;
 
-            var isoX = screenY / tileH + screenX / (2 * tileW);
-            var isoY = screenY / tileH - screenX / (2 * tileW);
+            var isoX = worldY / tileH + worldX / (2 * tileW);
+            var isoY = worldY / tileH - worldX / (2 * tileW);
 
             return new Vector2(isoX, isoY);
         }

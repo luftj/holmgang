@@ -32,7 +32,7 @@ namespace holmgang.Desktop
             // draw equipped items
             // todo: draw backdrop for equipment
             //var items = player.getAll<EquipmentComponent>();
-            ItemComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary };
+            ItemComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary, player.get<WieldingComponent>().ranged };
             Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width-10-16, 10);
             foreach(var item in items)
             {
@@ -51,6 +51,8 @@ namespace holmgang.Desktop
 
         public void update(GameTime gameTime)
         {
+            if(GameSingleton.Instance.entityManager.GetEntities<PlayerControlComponent>().Count == 0)
+                return;
             player = GameSingleton.Instance.entityManager.GetEntities<PlayerControlComponent>()[0];
             float hp = player.get<HealthComponent>().HP;
             if(hp <= 30)

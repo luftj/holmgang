@@ -20,5 +20,10 @@ namespace holmgang.Desktop
         {
             orientation = (float)Math.Atan2(target.Y - position.Y, target.X - position.X);
         }
+
+        public float distance(TransformComponent other)
+        {
+            return (position - other.position).Length();
+        }
     }
 }

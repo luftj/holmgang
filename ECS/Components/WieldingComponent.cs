@@ -12,22 +12,24 @@ namespace holmgang.Desktop
         {
         }
 
-        public ItemComponent wielding(string type)
+        public ItemComponent wielded(ItemType type)
         {
             if(primary?.type == type)
                 return primary;
             if(secondary?.type == type)
                 return secondary;
+            if(ranged?.type == type)
+                return ranged;
             return null;
         }
+
+        public float? weaponReach { get { return ranged?.reach ?? primary?.reach; }}
 
         public void equip(ItemComponent c)
         {
             if(c.durability <= 0) // don't equip broken items
                 return;
-
             // don't equip both
-
             // unequip primary
             if(primary == c)
                 primary = null;
@@ -38,12 +40,12 @@ namespace holmgang.Desktop
             else if(ranged == c)
                 ranged = null;
             // equip primary
-            else if(primary == null && c.type == "MELEE")
+            else if(primary == null && c.type == ItemType.MELEE)
                 primary = c;
             // equip secondary
-            else if(secondary == null && c.type == "BLOCK" || c.type == "MELEE")
+            else if(secondary == null && c.type == ItemType.BLOCK || c.type == ItemType.MELEE)
                 secondary = c;
-            else if(ranged == null && c.type == "RANGED")
+            else if(ranged == null && c.type == ItemType.RANGED)
                 ranged = c;
             //else: slots full, can't equip
         }
@@ -54,6 +56,8 @@ namespace holmgang.Desktop
                 primary = null;
             if(secondary == c)
                 secondary = null;
+            if(ranged == c)
+                ranged = null;
         }
     }
 }

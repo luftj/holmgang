@@ -27,7 +27,7 @@ namespace holmgang.Desktop
                             e.get<CharacterComponent>().movementSpeed :
                              (c as AIFollowComponent).target.get<CharacterComponent>().movementSpeed; // 
 
-                        if(dir == Vector2.Zero || dir.Length() < 30f) // todo: handle min distance (e.g. to player for attacking) where target is set instead
+                        if(dir == Vector2.Zero || dir.Length() < 30f) // todo: handle min distance (e.g. to player for attacking) where target is set instead. text uses aifollow as well!
                             continue;
                         dir.Normalize(); //zero vector -> NaN
                         dir *= (speed * (float)gameTime.ElapsedGameTime.TotalSeconds); // todo: delta time
@@ -72,32 +72,43 @@ namespace holmgang.Desktop
             //dir.Normalize(); //zero vector -> NaN
             //dir *= (speed * deltaS); // todo: delta time
 
-            if(entityManager.collisionSystem.getPassable(pos + dir))
-                e.get<TransformComponent>().position += dir;
+            var newpos = entityManager.collisionSystem.tryMove(pos, pos + dir);
+            e.get<TransformComponent>().position = newpos;
+
+            //if(entityManager.collisionSystem.getPassable(pos + dir))
+                //e.get<TransformComponent>().position += dir;
         }
 
-        private void aiAttack(Entity e, AIAttackComponent cc)
+        private void aiAttack(Entity attacker, AIAttackComponent attcomp)
         {
-            var targetPos = cc.target.get<TransformComponent>().position;
-            var trans = e.get<TransformComponent>();
-            trans.lookAt(targetPos);
-            var len = (targetPos - trans.position).Length();
-            if(len < cc.distance)
+            if(!entityManager.entities.Contains(attcomp.target))
             {
-                if(cc.time < cc.cooldown) //can't attack yet
+                // target already dead
+                attcomp.target = null;
+                attacker.detach(attcomp);
+                return;
+            }
+
+            var target = attcomp.target.get<TransformComponent>();
+            var attackerTransform = attacker.get<TransformComponent>();
+            attackerTransform.lookAt(target.position);
+            var len = attackerTransform.distance(target);
+            var reach = attacker.get<WieldingComponent>()?.weaponReach ?? attacker.get<CharacterComponent>().reach;  // reach not fixed: might have ranged weapon
+            if(len < reach)
+            {
+                if(attcomp.time < attcomp.cooldown) //can't attack yet
                     return;
 
                 // else can attack
-                Vector2 atpos = targetPos - trans.position;
+                Vector2 atpos = target.position - attackerTransform.position;
                 atpos.Normalize();
-                atpos *= 30f; // todo: reach not fixed -> put in component?
-                atpos += trans.position;
+                atpos *= reach;
+                atpos += attackerTransform.position;
 
-                entityManager.attachEntity(EntityFactory.createAttack(atpos, e, 10));
-                cc.time = 0.0f;
+                int damage = attacker.get<WieldingComponent>()?.primary.effect ?? attacker.get<CharacterComponent>().h2hdamage; // get damage from weapon or char component
+                entityManager.attachEntity(EntityFactory.createAttack(atpos, attacker, damage)); 
+                attcomp.time = 0.0f;
             }
         }
-
-
     }
 }

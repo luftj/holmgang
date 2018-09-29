@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace holmgang.Desktop
 {
@@ -17,6 +18,7 @@ namespace holmgang.Desktop
 
     public abstract class Component
     {
+        protected Entity owner;
         public static int idcounter = 0;
         public int ID; // use this for references when saving state
 
@@ -30,28 +32,38 @@ namespace holmgang.Desktop
         //    // make sure idcounter fits
         //}
 
+        public void setOwner(Entity entity)
+        {
+            owner = entity;
+        }
+
+        public virtual void setField(FieldInfo fi, object value)
+        {
+            fi.SetValue(this,value);
+        }
+
         public virtual string serialise()
         {
             string ret = "<" + this.GetType().ToString() + ">\n";
             foreach(var field in this.GetType().GetFields())
             {
+                var val = field.GetValue(this);
                 if(field.FieldType.BaseType == typeof(Component))
                 {
-                    var val = field.GetValue(this);
                     if(val == null)
                         ret += field.Name + ":" + "null" + "\n";
                     else
                         ret += field.Name + ":" + (val as Component).ID + "\n";
-                } else if(field.FieldType == typeof(Entity))
+                } 
+                //else if(field.FieldType.BaseType == typeof(Enum)) // not necessary, prints value as string
+                else if(field.FieldType == typeof(Entity))
                 {
-                    var val = field.GetValue(this);
                     if(val == null)
                         ret += field.Name + ":" + "null" + "\n";
                     else
                         ret += field.Name + ":" + (val as Entity).ID + "\n";
                 } else if(field.FieldType == typeof(List<string>))
                 {
-                    var val = field.GetValue(this);
                     if(val == null)
                         ret += field.Name + ":" + "null" + "\n";
                     else
