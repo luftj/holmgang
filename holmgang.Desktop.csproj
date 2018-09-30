@@ -90,6 +90,9 @@
     <Compile Include="ECS\Systems\HealthSystem.cs" />
     <Compile Include="ECS\Components\ProjectileComponent.cs" />
     <Compile Include="View\GeometryDrawer.cs" />
+    <Compile Include="ECS\Components\ParticleEmitterComponent.cs" />
+    <Compile Include="ECS\Systems\ParticleSystem.cs" />
+    <Compile Include="ECS\Components\ParticleComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

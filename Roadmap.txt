@@ -43,6 +43,7 @@ Gameplay
 [X]---ranged attack -> for aiming ranged, keyup->shoot/throw (other method: key for swapping melee/ranged then normal or holding key)
 [X]----draw aiming help line
 [X]----range and deceleration -> remove damagingcomponent after drop
+[ ]----maybe use range instead of acceleration?
 [ ]---throwing melee weapon and shield?
 ---push back enemies (especially when they block)
 [/]block
@@ -82,15 +83,24 @@ AI
 --collidercomponent (enables different map storage as well)
 
 UI
--HUD
---runes
+[/]-HUD
+[ ]--runes
 [ ]-other
-[X]--inventory screen etc
-[ ]--dialog screens? trade?
+[X]-inventory screen etc
+[ ]-dialog screens? trade?
 
 Particle system and environmental effects
+[/]-particle emitter component
+[X]--cooldown
+[/]--total num particles or expiration time
+[ ]--randomness
+[X]-particle entity
+[X]--sprite, expiration, particle component with velocity
+-update particles in physicssystem or particlesystem
 -weapon swoosh
 -blood
+--splatter (velocity = negative impact orientation) from attacks: higher with damage -> make sure, instagib still produces enough particles
+--slow bleeding (no velocity) dependant on hp
 -fire
 -light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
 

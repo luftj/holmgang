@@ -109,5 +109,16 @@ namespace holmgang.Desktop
             ret.attach(new ItemComponent(ItemType.RANGED, "javelin", 120));
             return ret;
         }
+
+        public static Entity createParticle(Vector2 pos, ParticleProperties particleProperties)
+        {
+            // velocity, lifespan, texture, etc from properties
+            Entity ret = new Entity();
+            ret.attach(new TransformComponent(pos, 0f));
+            ret.attach(new SpriteComponent(particleProperties.type,particleProperties.colour));
+            ret.attach(new ExpirationComponent(particleProperties.lifeSpan));
+            ret.attach(new ParticleComponent(){velocity=particleProperties.velocity});
+            return ret;
+        }
     }
 }

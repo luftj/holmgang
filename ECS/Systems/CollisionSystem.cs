@@ -95,6 +95,8 @@ namespace holmgang.Desktop
 
                     affectedEntity.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
 
+                    affectedEntity.attach(new ParticleEmitterComponent(2f, 5) { particleProperties = new ParticleProperties(Vector2.One*10f, 3f, "dot",Color.DarkRed) });
+
                     // pull aggro
                     if(!affectedEntity.has<PlayerControlComponent>()) // todo: only for NPCs, could there be other entities with healthcomponent?
                     {

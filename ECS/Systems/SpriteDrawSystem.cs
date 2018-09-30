@@ -23,7 +23,7 @@ namespace holmgang.Desktop
             {
                 if(e.has<SpriteComponent>() && e.has<TransformComponent>())
                 {
-                    Color col = e.has<PlayerControlComponent>() ? Color.Blue : Color.White; // debug
+                    Color col = e.get<SpriteComponent>().colour;//e.has<PlayerControlComponent>() ? Color.Blue : Color.White; // debug
                     foreach(var c in e.getAll<SpriteComponent>())
                     {
                         Texture2D tex = ContentSupplier.Instance.textures[c.spriteName];

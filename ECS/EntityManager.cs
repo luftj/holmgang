@@ -17,6 +17,7 @@ namespace holmgang.Desktop
         ControlSystem controlSystem;
         SoundSystem soundSystem;
         HealthSystem healthSystem;
+        ParticleSystem particleSystem;
 
         public EntityManager()
         {
@@ -30,6 +31,7 @@ namespace holmgang.Desktop
             controlSystem = new ControlSystem(this);
             soundSystem = new SoundSystem(this);
             healthSystem = new HealthSystem(this);
+            particleSystem = new ParticleSystem(this);
         }
 
         public void LoadContent()
@@ -60,7 +62,7 @@ namespace holmgang.Desktop
             collisionSystem.update(gameTime);
             controlSystem.update(gameTime);
             healthSystem.update(gameTime);
-
+            particleSystem.Update(gameTime);
             soundSystem.update();
         }
 
