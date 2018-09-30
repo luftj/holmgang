@@ -21,7 +21,8 @@ namespace holmgang.Desktop
         {
             var hp = player.get<HealthComponent>().HP;
             spriteBatch.DrawString(ContentSupplier.Instance.fonts["testfont"], "HP: " + hp, Vector2.Zero, Color.White); // debug
-            spriteBatch.Draw(ContentSupplier.Instance.textures["dot"], Mouse.GetState().Position.ToVector2(), Color.White);
+            var dottex = ContentSupplier.Instance.textures["dot"];
+            spriteBatch.Draw(dottex, Mouse.GetState().Position.ToVector2() - dottex.Bounds.Size.ToVector2() / 2f, Color.White);
 
             if(hp <= 80)
             {
@@ -31,7 +32,6 @@ namespace holmgang.Desktop
 
             // draw equipped items
             // todo: draw backdrop for equipment
-            //var items = player.getAll<EquipmentComponent>();
             ItemComponent[] items = { player.get<WieldingComponent>().primary, player.get<WieldingComponent>().secondary, player.get<WieldingComponent>().ranged };
             Vector2 drawpos = new Vector2(GameSingleton.Instance.graphics.Viewport.Width-10-16, 10);
             foreach(var item in items)
@@ -46,6 +46,15 @@ namespace holmgang.Desktop
                     spriteBatch.Draw(tex, drawpos, Color.White);
                 }
                 drawpos.Y += 26;
+            }
+
+            //draw aiming line
+            if(player.get<CharacterComponent>().isThrowing)
+            {
+                var cam = player.get<CameraComponent>().camera;
+                GeometryDrawer.drawLineGradient(cam.WorldToScreen(player.get<TransformComponent>().position), 
+                                                Mouse.GetState().Position.ToVector2(), 
+                                                Color.White, new Color(0)); // line fades out
             }
         }
 

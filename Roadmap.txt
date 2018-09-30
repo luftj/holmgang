@@ -40,8 +40,10 @@ Gameplay
 [/]--attacks
 ---attack speed
 ---attack directions? via current movement -> moving left: attack from left etc
-[/]---ranged attack -> for aiming ranged, keyup->shoot/throw (other method: key for swapping melee/ranged then normal or holding key)
-[----draw aiming help line
+[X]---ranged attack -> for aiming ranged, keyup->shoot/throw (other method: key for swapping melee/ranged then normal or holding key)
+[X]----draw aiming help line
+[X]----range and deceleration -> remove damagingcomponent after drop
+[ ]---throwing melee weapon and shield?
 ---push back enemies (especially when they block)
 [/]block
 ---block directions? (except shield)
@@ -65,7 +67,7 @@ Gameplay
 [/]--stats
 [X]--state, condition
 --leveling
---highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent>
+--highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent> outlineeffect in spritebatch?
 ---border texture effect?
 
 AI

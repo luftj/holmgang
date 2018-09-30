@@ -47,8 +47,17 @@ namespace holmgang.Desktop
 
         public void detach(Component c)
         {
-            c.setOwner(null);   // throw exceptions, when this component is still referenced somewhere
+            c.setOwner(null);   // throw nullreference exceptions, when this component is still referenced somewhere
             components.Remove(c);
+        }
+
+        public void detachAll<T>() where T : Component
+        {
+            List<T> list = getAll<T>();
+            foreach(var item in list)
+            {
+                detach(item);
+            }
         }
 
         public bool has<T>() where T : Component 

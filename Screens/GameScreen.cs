@@ -51,6 +51,7 @@ namespace holmgang.Desktop
 
             spriteBatch = new SpriteBatch(GameSingleton.Instance.graphics);
             maprenderer = new TiledMapRenderer(GameSingleton.Instance.graphics);
+            GeometryDrawer.init(GameSingleton.Instance.graphics, spriteBatch); // todo put this somewhere else maybe?
 
             //var viewportAdapter = new BoxingViewportAdapter(game.Window, game.GraphicsDevice, 
                                                             //game.GraphicsDevice.Viewport.Width, 

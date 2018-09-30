@@ -58,7 +58,15 @@ namespace holmgang.Desktop
             foreach(var projectile in entityManager.GetEntities<ProjectileComponent>()) // todo: put this somewhere else
             {
                 var transform = projectile.get<TransformComponent>();
-                transform.position += projectile.get<ProjectileComponent>().velocity;
+                transform.position += projectile.get<ProjectileComponent>().velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                projectile.get<ProjectileComponent>().velocity += projectile.get<ProjectileComponent>().acceleration * (float) gameTime.ElapsedGameTime.TotalSeconds;
+                if(projectile.get<ProjectileComponent>().velocity.LengthSquared() < 1f)
+                {   //projectile stopped
+                    projectile.get<ProjectileComponent>().velocity = Vector2.Zero;
+                    //ItemComponent ic = projectile.get<ItemComponent>();
+                    projectile.detachAll<DamagingOnceComponent>();
+                    projectile.detachAll<ProjectileComponent>();
+                }
             }
         }
 

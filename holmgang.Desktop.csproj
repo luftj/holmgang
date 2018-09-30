@@ -89,6 +89,7 @@
     <Compile Include="SavefileHandler.cs" />
     <Compile Include="ECS\Systems\HealthSystem.cs" />
     <Compile Include="ECS\Components\ProjectileComponent.cs" />
+    <Compile Include="View\GeometryDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -34,10 +34,15 @@ namespace holmgang.Desktop
 
         public static Entity createItem(Vector2 pos, ItemType type, string name, int effect)
         {
+            return createItem(pos, new ItemComponent(type, name, effect));
+        }
+
+        public static Entity createItem(Vector2 pos, ItemComponent item)
+        {
             Entity ret = new Entity();
             ret.attach(new TransformComponent(pos, 0f));
-            ret.attach(new SpriteComponent(name));      // todo think of something clever to query sprite name from itemcomponent
-            ret.attach(new ItemComponent(type,name,effect));
+            ret.attach(new SpriteComponent(item.name));      // todo think of something clever to query sprite name from itemcomponent
+            ret.attach(item);
             return ret;
         }
 
@@ -94,12 +99,14 @@ namespace holmgang.Desktop
             ret.attach(new SpriteComponent("javelin"));
             ret.attach(new DamagingOnceComponent(120, owner));
             ret.attach(new SoundComponent("sound"));
-            ret.attach(new ExpirationComponent(10.0));
+            //ret.attach(new ExpirationComponent(10.0));
             Vector2 velocity;
             velocity.X = (float)Math.Cos(owner.get<TransformComponent>().orientation);
             velocity.Y = (float)Math.Sin(owner.get<TransformComponent>().orientation);
-            velocity *= 20f;
+            velocity.Normalize();
+            velocity *= 300f;
             ret.attach(new ProjectileComponent(velocity));
+            ret.attach(new ItemComponent(ItemType.RANGED, "javelin", 120));
             return ret;
         }
     }
