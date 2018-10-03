@@ -6,6 +6,10 @@ namespace holmgang.Desktop
 {
     public static class EntityFactory
     {
+        static Random rng = new Random();
+
+
+
         public static Entity createCamera(Camera2D camera)
         {
             Entity ret = new Entity();
@@ -113,11 +117,19 @@ namespace holmgang.Desktop
         public static Entity createParticle(Vector2 pos, ParticleProperties particleProperties)
         {
             // velocity, lifespan, texture, etc from properties
+            var dev = rng.NextSingle(-particleProperties.directionDeviation / 2f, particleProperties.directionDeviation / 2f);
+            var deviatedDir = particleProperties.direction + dev;
+            var vel = new Vector2((float)Math.Cos(deviatedDir),
+                                  (float)Math.Sin(deviatedDir));
+            vel.Normalize();
+            vel *= particleProperties.speed + rng.NextSingle(-particleProperties.speedDeviation / 2f, particleProperties.speedDeviation / 2f);
+            var lifespan = particleProperties.lifeSpan + rng.NextSingle(-particleProperties.lifeSpanDeviation / 2f, particleProperties.lifeSpanDeviation / 2f);
+
             Entity ret = new Entity();
             ret.attach(new TransformComponent(pos, 0f));
-            ret.attach(new SpriteComponent(particleProperties.type,particleProperties.colour));
-            ret.attach(new ExpirationComponent(particleProperties.lifeSpan));
-            ret.attach(new ParticleComponent(){velocity=particleProperties.velocity});
+            ret.attach(new SpriteComponent(particleProperties.type, particleProperties.colour));
+            ret.attach(new ExpirationComponent(lifespan));
+            ret.attach(new ParticleComponent() { velocity = vel });
             return ret;
         }
     }

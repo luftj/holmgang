@@ -27,6 +27,37 @@ namespace holmgang.Desktop
                         entityManager.attachEntity(cam);
                     }
                     entityManager.destroyEntity(character); // u ded :(
+                } 
+                // bleeding particle effect
+                else if(hc.HP<=50)
+                {
+                    if(!character.has<ParticleEmitterComponent>())
+                    {
+                        ParticleEmitterComponent pec = new ParticleEmitterComponent(0.8f, 10) {
+                            particleProperties = new ParticleProperties("dot",
+                                                                        0f,
+                                                                        10f,
+                                                                        0f,
+                                                                        lifeSpanDeviation: 2f,
+                                                                        colour: Color.DarkRed)
+                        };
+                        character.attach(pec);
+                    }
+
+                } else if(hc.HP <= 80)
+                {
+                    if(!character.has<ParticleEmitterComponent>())
+                    {
+                        ParticleEmitterComponent pec = new ParticleEmitterComponent(2f, 3) {
+                            particleProperties = new ParticleProperties("dot",
+                                                                            0f,
+                                                                            10f,
+                                                                            0f,
+                                                                            lifeSpanDeviation: 2f,
+                                                                            colour: Color.DarkRed)
+                        };
+                        character.attach(pec);
+                    }
                 }
             }
         }

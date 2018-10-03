@@ -95,7 +95,20 @@ namespace holmgang.Desktop
 
                     affectedEntity.get<HealthComponent>().doDamage(shield != null ? (c.damage - shield.effect) : c.damage);
 
-                    affectedEntity.attach(new ParticleEmitterComponent(2f, 5) { particleProperties = new ParticleProperties(Vector2.One*10f, 3f, "dot",Color.DarkRed) });
+                    // gore goes against the direction the damage is coming from
+                    var damageDir = (float)Math.Atan2(damagingEffect.get<TransformComponent>().position.Y - affectedEntity.get<TransformComponent>().position.Y, 
+                                                      damagingEffect.get<TransformComponent>().position.X - affectedEntity.get<TransformComponent>().position.X);
+
+                    // create splatter
+                    affectedEntity.attach(new ParticleEmitterComponent(0.0f, c.damage/3) { 
+                        particleProperties = new ParticleProperties("dot",
+                                                                    damageDir,
+                                                                    0.3f,
+                                                                    200f,
+                                                                    1f,
+                                                                    0.1f,
+                                                                    50f,
+                                                                    Color.DarkRed) });
 
                     // pull aggro
                     if(!affectedEntity.has<PlayerControlComponent>()) // todo: only for NPCs, could there be other entities with healthcomponent?

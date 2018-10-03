@@ -93,14 +93,17 @@ Particle system and environmental effects
 [/]-particle emitter component
 [X]--cooldown
 [/]--total num particles or expiration time
-[ ]--randomness
+[/]--randomness
+[X]---in speed and lifespan
+[X]---in direction
 [X]-particle entity
 [X]--sprite, expiration, particle component with velocity
 -update particles in physicssystem or particlesystem
 -weapon swoosh
 -blood
---splatter (velocity = negative impact orientation) from attacks: higher with damage -> make sure, instagib still produces enough particles
---slow bleeding (no velocity) dependant on hp
+[X]--splatter (velocity = negative impact orientation) from attacks
+[X]---higher with damage -> make sure, instagib still produces enough particles
+[X]--slow bleeding (no velocity) dependant on hp -> healthsystem
 -fire
 -light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
 

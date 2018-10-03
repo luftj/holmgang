@@ -16,7 +16,7 @@ namespace holmgang.Desktop
                 // update cooldowns
                 var pec = particleEmitter.get<ParticleEmitterComponent>();
                 pec.particleSpawnCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if(pec.particleSpawnCooldown <= 0f)
+                while(pec.particleSpawnCooldown <= 0f)
                 {
                     pec.particleSpawnCooldown = pec.particleSpawnFreq; // reset timer
                     --pec.totalNumParticles;
@@ -27,6 +27,7 @@ namespace holmgang.Desktop
                     {
                         // no more particles, emitter not needed anymore
                         particleEmitter.detach(pec);
+                        break;
                     }
                 }
             }
