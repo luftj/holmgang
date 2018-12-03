@@ -52,6 +52,7 @@ namespace holmgang.Desktop
             sgc.Register(new GameScreen());
             sgc.Register(new GameMenuScreen());
             sgc.Register(new InventoryScreen());
+            sgc.Register(new TradeScreen());
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace holmgang.Desktop
             sgc.FindScreen<GameScreen>().init(GameSingleton.Instance.entityManager);
             sgc.FindScreen<GameMenuScreen>().init(GameSingleton.Instance.entityManager);
             sgc.FindScreen<InventoryScreen>().init(GameSingleton.Instance.entityManager);
+            sgc.FindScreen<TradeScreen>().init(GameSingleton.Instance.entityManager);
 
             base.Initialize();
         }

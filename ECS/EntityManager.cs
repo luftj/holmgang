@@ -14,7 +14,7 @@ namespace holmgang.Desktop
         ExpirationSystem expirationSystem;
         AISystem aIService;
         public CollisionSystem collisionSystem;
-        ControlSystem controlSystem;
+        public ControlSystem controlSystem;
         SoundSystem soundSystem;
         HealthSystem healthSystem;
         ParticleSystem particleSystem;

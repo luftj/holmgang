@@ -60,8 +60,6 @@ namespace holmgang.Desktop
             owner.detach(rangedweapon);
             owner.detach(owner.getAll<SpriteComponent>().Find(x => x.spriteName == "javelin"));
             isThrowing = false;
-            // todo: create javelin entity
-            
         }
     }
 }

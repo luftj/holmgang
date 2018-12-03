@@ -24,37 +24,36 @@ Gamestate
 [X]-save game
 [X]-store map in savegame
 [ ]-loading entities from map
---store entity names/types in map
---entityfactory createfromstring method takes pos and type/name
---call above when loading savestate
+[ ]--store entity names/types in map, consider [1]
+[ ]--entityfactory createfromstring method takes pos and type/name
+[ ]--call above when initialising state from map (during mapchange)
 
 Map handling
--decouple tiledmap handling
--load spawn points from object layer. -> point objects in object layer -> entityfactory interface. consider [1]
+-decouple tiledmap handling to abstract map object (problems with collision detection?)
+-load spawn points from object layer -> point objects in object layer -> entityfactory interface. consider [1]
 
 Gameplay
--movement
---velocity system -> needed for determining attack directions
+[ ]-movement
+[ ]--velocity system -> needed for determining attack directions
 [X]--slide along obstacles
--character actions/states
+[/]-character actions/states
 [/]--attacks
----attack speed
----attack directions? via current movement -> moving left: attack from left etc
+[ ]---attack speed
+[ ]---attack directions? via current movement -> moving left: attack from left etc
 [X]---ranged attack -> for aiming ranged, keyup->shoot/throw (other method: key for swapping melee/ranged then normal or holding key)
 [X]----draw aiming help line
 [X]----range and deceleration -> remove damagingcomponent after drop
 [ ]----maybe use range instead of acceleration?
 [ ]---throwing melee weapon and shield?
----push back enemies (especially when they block)
-[/]block
----block directions? (except shield)
----backstab?
+[ ]---push back enemies (especially when they block) -> weight field? consider static world objects as well
+[/]-block
+[ ]---block directions? (except shield)
+[ ]---backstab?
 [X]---damage shield
----reduce movement speed
---dash/sprint
---roll (sideways dash) -> how to control?
---duck?
--equipment/items
+[ ]---reduce movement speed
+[ ]--dash/sprint
+[ ]--roll (sideways dash) -> how to control?
+[/]-equipment/items
 [ ]--inventory and iso texture for every item -> dynamic getter in contentsupplier
 [X]--picking up items
 [X]---auto equip
@@ -62,66 +61,73 @@ Gameplay
 [X]--equipping/unequipping items
 [X]--dropping items
 [X]---item stacks on ground
-[/]--item classes etc
+[X]--item classes/types
 [/]--drawing equipped items
 [ ]---consider [2]
 [/]--stats
 [X]--state, condition
---leveling
---highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent> outlineeffect in spritebatch?
----border texture effect?
+[ ]--leveling
+[ ]--highlight hovered-over items -> pickerSystem -> manipulate spriteComponent if has<PickableComponent> outlineeffect in spritebatch?
+[ ]---border texture effect?
 
 AI
--behaviour statemachine?
--pathfinding
---navmesh?
+[ ]-behaviour statemachine?
+[ ]-pathfinding
+[ ]--navmesh?
 [X]-more precise collision for ai (at least onscreen)
--factions/friend-or-foe detection
+[ ]-factions/friend-or-foe detection
 [X]--pull aggro when attacked
---change faction relation when aggro is pulled
--collision with other characters
---collidercomponent (enables different map storage as well)
+[ ]--change faction relation when aggro is pulled
+[ ]-collision with other characters
+[ ]--collidercomponent for npc and static objects (enables different (future) map storage as well)
 
 UI
 [/]-HUD
 [ ]--runes
-[ ]-other
 [X]-inventory screen etc
 [ ]-dialog screens? trade?
 
 Particle system and environmental effects
-[/]-particle emitter component
+[ ]-weapon swoosh
+[ ]-fire
+[ ]-light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
+[X]-update particles in physicssystem or particlesystem
+[X]-particle emitter component
 [X]--cooldown
-[/]--total num particles or expiration time
-[/]--randomness
+[/]--total num particles or expiration time (or rather recreate until time expires in system?)
+[X]--randomness
 [X]---in speed and lifespan
 [X]---in direction
 [X]-particle entity
 [X]--sprite, expiration, particle component with velocity
--update particles in physicssystem or particlesystem
--weapon swoosh
--blood
+[X]-blood
 [X]--splatter (velocity = negative impact orientation) from attacks
 [X]---higher with damage -> make sure, instagib still produces enough particles
 [X]--slow bleeding (no velocity) dependant on hp -> healthsystem
--fire
--light and shadow -> apply texeffect when drawing map? or draw extra layer (worse performance?)?
 
 Environment interaction
--doors/map changes -> place triggers in object layer of map
--talking to npc
+[ ]-doors/map changes -> place triggers in object layer of map
+[ ]-talking to npc
 [X]--simple speech: print text after interact
---complex dialogue: trade etc
--using usable things?
--movement speed on different soil types -> place in collision layer of map
+[ ]--complex dialogue: trade etc
+[ ]---trade screen
+[ ]----2x character component
+[ ]----2 inventory displays
+[ ]----swap when player items value >= npc items value
+[ ]-----value system
+[ ]----part stacks
+[ ]-using usable things?
+[ ]-movement speed on different soil types -> place in collision layer of map?
 
 menues
 -options
 --screen resolution
 --fullscreen
 -layouting
+--centering text
 -loadgamescreen with savegame selection
 -savegamescreen with filepath/savename specification?
+-no exiting without saving?
 
 =============
 =  Roadmap  =

@@ -89,7 +89,6 @@ namespace holmgang.Desktop
             entityManager.attachEntity(EntityFactory.createAttack(atpos, player, sword != null ? sword.effect : 10));
         }
 
-
         private void playerMove(Entity player, Vector2 move, float deltaS)
         {
             Camera2D cam = entityManager.GetEntities<CameraComponent>()[0].get<CameraComponent>().camera;
@@ -148,6 +147,20 @@ namespace holmgang.Desktop
                 return false;
             entityManager.attachEntity(EntityFactory.createSpeech(speech, speaker));
             return true;
+        }
+
+        public bool trade()
+        {
+            // trade
+            Entity player = entityManager.GetEntities<PlayerControlComponent>()[0];
+            var closestTrader = entityManager.getClosest<AITraderComponent>(player);
+            float dist = (closestTrader.get<TransformComponent>().distance(player.get<TransformComponent>()));
+            if (dist < player.get<PlayerControlComponent>().interactionDistance)
+            {
+                // close enough, open trade screen
+                return true;
+            }
+            return false;
         }
     }
 }

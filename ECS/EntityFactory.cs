@@ -72,6 +72,10 @@ namespace holmgang.Desktop
             //ret.attach(new AIMoveToComponent(new Vector2(-300,200)));
             ret.attach(new AISimpleDialogueComponent("Hey.", "Fuck off."));
             ret.attach(new CharacterComponent());
+            ret.attach(new ItemComponent(ItemType.MISC, "coin", 1));
+            ret.attach(new ItemComponent(ItemType.MISC, "coin", 1));
+            ret.attach(new ItemComponent(ItemType.RANGED, "javelin", 200));
+            ret.attach(new AITraderComponent());
             return ret;
         }
 

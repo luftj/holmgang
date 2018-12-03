@@ -12,7 +12,7 @@
     <AssemblyName>holmgang.Desktop</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Any CPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -93,6 +93,8 @@
     <Compile Include="ECS\Components\ParticleEmitterComponent.cs" />
     <Compile Include="ECS\Systems\ParticleSystem.cs" />
     <Compile Include="ECS\Components\ParticleComponent.cs" />
+    <Compile Include="Screens\TradeScreen.cs" />
+    <Compile Include="ECS\Components\AI\AITraderComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

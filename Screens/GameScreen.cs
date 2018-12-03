@@ -83,6 +83,12 @@ namespace holmgang.Desktop
                     firstframe = true;
                     Show<InventoryScreen>();
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.T) && prevKB.IsKeyUp(Keys.T))
+                {
+                    firstframe = true;
+                    if(entityManager.controlSystem.trade())
+                        Show<TradeScreen>();
+                }
             } else
             {
                 firstframe = false;

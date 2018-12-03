@@ -50,11 +50,11 @@ namespace holmgang.Desktop
                     {
                         ParticleEmitterComponent pec = new ParticleEmitterComponent(2f, 3) {
                             particleProperties = new ParticleProperties("dot",
-                                                                            0f,
-                                                                            10f,
-                                                                            0f,
-                                                                            lifeSpanDeviation: 2f,
-                                                                            colour: Color.DarkRed)
+                                                                        0f,
+                                                                        10f,
+                                                                        0f,
+                                                                        lifeSpanDeviation: 2f,
+                                                                        colour: Color.DarkRed)
                         };
                         character.attach(pec);
                     }
