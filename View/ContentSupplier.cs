@@ -44,7 +44,7 @@ namespace holmgang.Desktop
 
         public void LoadContent()
         {
-            ContentSupplier.Instance.fonts.Add("testfont", con.Load<SpriteFont>("testfont"));
+            ContentSupplier.Instance.fonts.Add("testfont", con.Load<SpriteFont>("testfont2"));
             ContentSupplier.Instance.textures.Add("char", con.Load<Texture2D>("char"));
             ContentSupplier.Instance.textures.Add("x", con.Load<Texture2D>("x"));
             ContentSupplier.Instance.textures.Add("dot", con.Load<Texture2D>("dot"));
@@ -55,7 +55,7 @@ namespace holmgang.Desktop
             ContentSupplier.Instance.maps.Add("map",con.Load<TiledMap>("test2"));
             ContentSupplier.Instance.maps.Add("map2", con.Load<TiledMap>("test3"));
             ContentSupplier.Instance.textures.Add("hplow", con.Load<Texture2D>("vignette800x480"));
-            ContentSupplier.Instance.music.Add("music", con.Load<Song>("valris"));
+            //ContentSupplier.Instance.music.Add("music", con.Load<Song>("valris"));
             ContentSupplier.Instance.sounds.Add("sound", con.Load<SoundEffect>("slashsound"));
         }
     }
